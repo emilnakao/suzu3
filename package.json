@@ -1,0 +1,28 @@
+{
+  "name": "suzu3",
+  "version": "0.0.1",
+  "description": "Sistema de Controle de Presenças",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "karma"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emilnakao/suzu3.git"
+  },
+  "keywords": [
+    "suzu",
+    "presence",
+    "control"
+  ],
+  "author": "Emil Nakao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emilnakao/suzu3/issues"
+  },
+  "homepage": "https://github.com/emilnakao/suzu3#readme",
+  "dependencies": {
+    "electron": "^1.3.2"
+  }
+}

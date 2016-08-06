@@ -26,3 +26,17 @@ Atenção: Ele ainda está em fase inicial de desenvolvimento, e não tem nenhum
 
 - Desenvolvimento com electron, typescript, react e bootstrap.
 - Persistência de dados: PouchDB
+
+## Desenvolvimento
+
+### Pré-requisitos
+
+Ter o NodeJS instalado (https://nodejs.org/en/)
+
+Instale as dependências com:
+
+    npm install
+
+Para rodar:
+
+    npm start
