@@ -2,3 +2,5 @@ node_modules
 dist
 typings
 ts-build
+
+*.log

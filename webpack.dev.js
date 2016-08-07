@@ -21,7 +21,11 @@ var config = {
     }, {
       test: /\.png|\.svg$/,
       loaders: ['file-loader']
-    }]
+    },
+    {
+        test: /\.less$/,
+        loader: "style!css!less"
+      }]
   },
   output: {
     path: __dirname + '/dist',
@@ -29,7 +33,7 @@ var config = {
     filename: 'bundle.js'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', ".ts", ".tsx"],
+    extensions: ['', '.js', '.jsx', ".ts", ".tsx", "less"],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
