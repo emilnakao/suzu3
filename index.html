@@ -3,18 +3,25 @@
   <head>
     <meta charset="UTF-8">
     <title>:: SUZU 3</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+      <!-- container da aplicação em react -->
+      <div id="app-container"></div>
 
-    <div id="app-container"></div>
+      <!--  react e react dom importados separadaramente para agilizar bundle com webpack -->
+      <script src="./node_modules/react/dist/react.js"></script>
+      <script src="./node_modules/react-dom/dist/react-dom.js"></script>
 
-        <script src="./node_modules/react/dist/react.js"></script>
-        <script src="./node_modules/react-dom/dist/react-dom.js"></script>
       <script src="./dist/bundle.js"></script>
+
+      <script>
+      (function() {
+        const script = document.createElement('script');
+        script.src = process.env.ENV === 'development' ? 'http://localhost:9000/dist/bundle.js' : './dist/bundle.js';
+        document.write(script.outerHTML);
+      }());
+    </script>
   </body>
 
 </html>
