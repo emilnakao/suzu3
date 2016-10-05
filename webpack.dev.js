@@ -6,6 +6,8 @@ var config = {
     'webpack-hot-middleware/client?reload=true&path=http://localhost:9000/__webpack_hmr',
     './src/index.tsx',
   ],
+  // Enable sourcemaps for debugging webpack's output.
+  devtool: "source-map",
   module: {
     loaders: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
