@@ -42,7 +42,7 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
     }
 
     filterPersonList(searchToken: string): Array<Person> {
-        let regex = new RegExp(".*" + searchToken.replace(" ", ".*") + ".*")
+        let regex = new RegExp(".*" + searchToken.replace(" ", ".*") + ".*", "i")
 
         return this.state.personList.filter(person => {
             return person.name.match(regex) != null;
@@ -81,7 +81,7 @@ export interface CheckInOptionProps {
 class CheckInOption extends React.Component<CheckInOptionProps, {}> {
     render() {
         return (
-            <li key="{this.props.person.id}">{this.props.person.name}</li>
+            <li className="check-in-person" key="{this.props.person.id}">{this.props.person.name}</li>
         );
     }
 }

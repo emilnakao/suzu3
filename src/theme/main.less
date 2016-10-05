@@ -14,3 +14,19 @@ html, body, div.app-container {
   background-color: @suzu-cream;
   color: @suzu-black;
 }
+
+/* fonte: https://codemyviews.com/blog/10-less-css-examples-you-should-steal-for-your-projects */
+
+/* Mixin */
+.border-radius (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+/* Mixin */
+@base: #663333;
+@complement1: spin(@base, 180);
+@complement2: darken(spin(@base, 180), 5%);
+@lighten1: lighten(@base, 15%);
+@lighten2: lighten(@base, 30%);
