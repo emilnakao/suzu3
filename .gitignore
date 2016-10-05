@@ -4,3 +4,5 @@ typings
 ts-build
 
 *.log
+
+.idea
