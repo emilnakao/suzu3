@@ -11,6 +11,8 @@ export interface CheckInState {
     checkedInList?: Array<Person>;
     searchToken?: string;
     personList?: Array<Person>;
+    personFocus?:Person;
+    personFocusIdx?:number;
 }
 
 export class CheckIn extends React.Component<CheckInProps, CheckInState> {
@@ -19,6 +21,8 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
         super(props);
 
         this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+        this.focusPerson = this.focusPerson.bind(this);
+        this.personHasFocus = this.personHasFocus.bind(this);
 
         this.state = {
             // lista de pessoas que já fizeram check-in
@@ -54,20 +58,55 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
         this.setState({searchToken : target.value});
     }
 
+    /**
+     * TODO: refactor me!
+     * @param e
+     */
+    focusPerson(e: React.KeyboardEvent) {
+        // arrow down
+        if(e.keyCode == 40){
+            // ninguém com foco ainda:
+            if(this.state.personFocus == undefined && this.state.personList.length > 0){
+
+                this.setState({personFocus : this.state.personList[0], personFocusIdx: 0});
+
+            } else if (this.state.personFocusIdx == this.state.personList.length - 1){
+              // não faz nada
+            } else if (this.state.personFocusIdx < this.state.personList.length){
+
+                let newFocusIdx = this.state.personFocusIdx + 1;
+                this.setState({personFocus : this.state.personList[newFocusIdx], personFocusIdx: newFocusIdx});
+            }
+        }
+
+        // arrow up
+        if(e.keyCode == 38){
+            if(this.state.personFocusIdx > 0){
+                let newFocusIdx = this.state.personFocusIdx - 1;
+                this.setState({personFocus: this.state.personList[newFocusIdx], personFocusIdx: newFocusIdx});
+            }else if(this.state.personFocusIdx == 0){
+                // não faz nada
+            }
+        }
+    }
+
+    personHasFocus(p : Person){
+        return this.state.personFocus != undefined && this.state.personFocus === p;
+    }
+
     render() {
-        return <div className="check-in">
+        return <div className="check-in" onKeyDown={this.focusPerson}>
             <div className="check-in-container">
                 <h2>Marcar Presenças (Check-In)</h2>
                 <div className="form-group">
-                    <input className="form-control input-lg" onChange={this.handleSearchInputChange} value={this.state.searchToken} type="text" placeholder="Digite o nome da pessoa"/>
+                    <input className="form-control input-lg" onChange={this.handleSearchInputChange}
+                           value={this.state.searchToken} type="text" placeholder="Digite o nome da pessoa" autoFocus="true"/>
                 </div>
                 <div className="check-in-list">
-                    <ul>
-                        {this.filterPersonList(this.state.searchToken).map(person => (
-                                <CheckInOption person={person}/>
-                            )
-                        )}
-                    </ul>
+                    {this.filterPersonList(this.state.searchToken).map(person => (
+                            <CheckInOption person={person} shouldFocus={this.personHasFocus(person)}/>
+                        )
+                    )}
                 </div>
             </div>
         </div>;
@@ -75,13 +114,27 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
 }
 
 export interface CheckInOptionProps {
-    person: Person
+    person: Person,
+    shouldFocus: boolean
 }
 
-class CheckInOption extends React.Component<CheckInOptionProps, {}> {
+class CheckInOption extends React.Component<CheckInOptionProps, {showButtons:boolean}> {
+    constructor(props){
+        super(props);
+        this.state = {showButtons : false}
+    }
+
     render() {
         return (
-            <li className="check-in-person" key="{this.props.person.id}">{this.props.person.name}</li>
+            <div className="check-in-person" key="{this.props.person.id}">
+            <p>{this.props.person.name}</p>
+                {this.props.shouldFocus ?
+                    <div>
+                        buttons
+                    </div>
+                : null
+                }
+            </div>
         );
     }
 }
