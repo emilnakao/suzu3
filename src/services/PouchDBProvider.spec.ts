@@ -29,11 +29,30 @@ describe('PouchDBProvider', () => {
 
     });
 
-    xit('finds or creates an entity', (done) => {
+    it('finds an unique entity calculating id :: entity exists', (done) => {
        let newEventType = new EventType("Normal Day");
 
+       provider.saveNew(newEventType).then(()=>{
+           return provider.findUnique(newEventType).then((findUniqueResult:EventType)=>{
+               expect(findUniqueResult.name).to.be.equal('Normal Day');
+               done();
+           });
+       }).catch((error) => {
+           done(error);
+       });
 
     });
+
+    xit('finds an unique entity calculating id :: entity is missing', (done) => {
+        let newEventType = new EventType("Normal Day");
+
+        provider.findUnique(newEventType).then((findUniqueResult:EventType)=>{
+            expect(findUniqueResult).to.not.exist;
+            done();
+        }).catch((error)=>{
+            done(error);
+        });
+    })
 
     afterEach(() => {
         provider.db.allDocs().then(function (result) {

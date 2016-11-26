@@ -1,6 +1,7 @@
 import * as PouchDB from 'pouchdb';
 import * as idbadapter from 'pouchdb-adapter-idb'
 import {IEntity} from "../domain/IEntity";
+import Response = PouchDB.Core.Response;
 PouchDB.plugin(idbadapter);
 
 /**
@@ -36,7 +37,7 @@ export default class PouchDBProvider {
      * @param document
      * @returns {void|IDBRequest|Promise<Core.Response>}
      */
-    public saveNew(document:IEntity){
+    public saveNew(document:IEntity):Promise<Response>{
 
         // a criação de id manualmente é uma boa prática para evitar índices secundários. Vide documentação do createId().
         document._id = document.createId();
@@ -47,6 +48,17 @@ export default class PouchDBProvider {
 
     public findOrCreate(query:any, newDocument:any){
 
+    }
+
+    /**
+     *
+     * @param document
+     * @returns {void|IDBRequest|Promise<Core.Revision<Content>[]>|Promise<Core.Document<Content>&Core.GetMeta>|undefined|V|any}
+     */
+    public findUnique(document:IEntity):Promise<IEntity>{
+        let id = document.createId();
+
+        return this.db.get(id);
     }
 
     public list(params : any){
