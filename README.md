@@ -1,4 +1,4 @@
-# suzu3 [![Build Status](https://travis-ci.org/emilnakao/suzu3.svg?branch=master)](https://travis-ci.org/emilnakao/suzu3)
+# suzu3 [![Build Status](https://travis-ci.org/emilnakao/suzu3.svg?branch=master)](https://travis-ci.org/emilnakao/suzu3) [![Dependency Status](https://david-dm.org/emilnakao/suzu3.svg)](https://https://david-dm.org/emilnakao/suzu3.svg-ci.org/emilnakao/suzu3)
 
 O Suzu 3 é um sistema para controle de presenças e geração de relatórios.
 
