@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./CheckIn.less";
-import {Person} from "../domain/Person";
+import Person from "../domain/Person";
+import PresenceService from "../services/PresenceService";
 
 export interface CheckInProps {
     compiler: string;
@@ -53,7 +54,7 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
         });
     }
 
-    handleSearchInputChange(e: React.FormEvent) {
+    handleSearchInputChange(e: React.FormEvent<any>) {
         let target = e.target as HTMLInputElement;
         this.setState({searchToken : target.value});
     }
@@ -62,7 +63,7 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
      * TODO: refactor me!
      * @param e
      */
-    focusPerson(e: React.KeyboardEvent) {
+    focusPerson(e: React.KeyboardEvent<any>) {
         // arrow down
         if(e.keyCode == 40){
             // ninguém com foco ainda:
@@ -88,6 +89,15 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
                 // não faz nada
             }
         }
+
+        // enter
+        if(e.keyCode == 13){
+            if(this.state.personFocus != undefined){
+                // TODO: injetar presence service
+                new PresenceService().savePresence(this.state.personFocus);
+            }
+
+        }
     }
 
     personHasFocus(p : Person){
@@ -100,11 +110,11 @@ export class CheckIn extends React.Component<CheckInProps, CheckInState> {
                 <h2>Marcar Presenças (Check-In)</h2>
                 <div className="form-group">
                     <input className="form-control input-lg" onChange={this.handleSearchInputChange}
-                           value={this.state.searchToken} type="text" placeholder="Digite o nome da pessoa" autoFocus="true"/>
+                           value={this.state.searchToken} type="text" placeholder="Digite o nome da pessoa" autoFocus={true}/>
                 </div>
                 <div className="check-in-list">
                     {this.filterPersonList(this.state.searchToken).map(person => (
-                            <CheckInOption person={person} shouldFocus={this.personHasFocus(person)}/>
+                            <CheckInOption key={person._id} person={person} shouldFocus={this.personHasFocus(person)}/>
                         )
                     )}
                 </div>
@@ -129,8 +139,9 @@ class CheckInOption extends React.Component<CheckInOptionProps, {showButtons:boo
             <div className="check-in-person" key="{this.props.person.id}">
             <p>{this.props.person.name}</p>
                 {this.props.shouldFocus ?
-                    <div>
-                        buttons
+                    <div className="btn-group" role="group">
+                        <button className="btn btn-default">Editar</button>
+                        <button className="btn btn-primary">Confirmar Presença</button>
                     </div>
                 : null
                 }
