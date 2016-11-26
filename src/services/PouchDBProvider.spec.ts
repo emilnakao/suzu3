@@ -9,7 +9,7 @@ import PouchDB from 'pouchdb';
 /**
  * https://pouchdb.com/2015/05/18/we-have-a-problem-with-promises.html
  */
-describe('Event', () => {
+describe('PouchDBProvider', () => {
 
     let provider : PouchDBProvider;
 
@@ -21,11 +21,9 @@ describe('Event', () => {
         let newEventType = new EventType("Ceremony");
 
         provider.saveNew(newEventType).then((result)=>{
-           console.log(result);
            expect(result.id).to.be.equal("Ceremony");
            done();
         }).catch((error) => {
-            console.log(error);
             done(error);
         });
 

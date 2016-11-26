@@ -23,7 +23,7 @@ module.exports = function(config){
         preprocessors: {
             'src/**/*.spec.ts' : ['webpack', 'sourcemap']
         },
-        reporters: ['dots'],
+        reporters: ['mocha'],
         webpack: {
             module: webpackConfig.module,
             resolve: webpackConfig.resolve
