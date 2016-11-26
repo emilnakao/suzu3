@@ -8,6 +8,7 @@ var webpackConfig = require('./webpack.dev');
 /**
  * tip for running chrome on travis found on
  * https://swizec.com/blog/how-to-run-javascript-tests-in-chrome-on-travis/swizec/6647
+ * http://blog.500tech.com/setting-up-travis-ci-to-run-tests-on-latest-google-chrome-version/
  *
  * @param config
  */
