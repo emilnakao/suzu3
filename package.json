@@ -7,7 +7,7 @@
     "start": "ENV=development electron .",
     "server": "babel-node devServer.js",
     "dev": "concurrently -k 'babel-node devServer.js' 'npm start'",
-    "test": "karma",
+    "test": "karma start",
     "test-debug": "karma start --auto-watch --single-run=false"
   },
   "repository": {
