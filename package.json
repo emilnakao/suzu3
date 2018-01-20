@@ -31,7 +31,7 @@
     "@types/react": "^0.14.39",
     "@types/react-dom": "^0.14.17",
     "@types/react-router": "^2.0.37",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "^4.0.0",
     "docuri": "^4.2.1",
     "electron": "^1.3.2",
     "fast-levenshtein": "^2.0.5",
