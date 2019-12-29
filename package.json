@@ -1,95 +1,86 @@
 {
   "name": "suzu3",
-  "version": "0.0.1",
-  "description": "Sistema de Controle de Presenças",
-  "main": "electronApp.js",
-  "scripts": {
-    "start": "ENV=development electron .",
-    "server": "babel-node devServer.js",
-    "dev": "concurrently -k 'babel-node devServer.js' 'npm start'",
-    "test": "karma start",
-    "test-debug": "karma start --auto-watch --single-run=false"
+  "version": "0.1.0",
+  "private": true,
+  "author": {
+    "name": "Suzu Team",
+    "email": "",
+    "url": ""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/emilnakao/suzu3.git"
+  "build": {
+    "appId": "com.my-website.my-app",
+    "productName": "SUZU 3",
+    "copyright": "Copyright © 2019 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
   },
-  "keywords": [
-    "suzu",
-    "presence",
-    "control"
-  ],
-  "author": "Emil Nakao",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/emilnakao/suzu3/issues"
-  },
-  "homepage": "https://github.com/emilnakao/suzu3#readme",
+  "main": "public/electron.js",
   "dependencies": {
-    "@types/moment": "^2.13.0",
-    "@types/pouchdb": "^5.4.28",
-    "@types/react": "^0.14.39",
-    "@types/react-dom": "^0.14.17",
-    "@types/react-router": "^2.0.37",
-    "bootstrap": "^3.3.7",
-    "docuri": "^4.2.1",
-    "electron": "^1.3.2",
-    "fast-levenshtein": "^2.0.5",
-    "moment": "^2.17.0",
-    "pouchdb": "^6.0.6",
-    "pouchdb-adapter-idb": "^6.0.6",
-    "pouchdb-collate": "^6.0.7",
-    "pouchdb-core": "^6.0.7",
-    "react": "^15.3.0",
-    "react-dom": "^15.3.0",
-    "react-router": "^2.6.1",
-    "speakingurl": "^10.0.0"
+    "@fortawesome/fontawesome-svg-core": "^1.2.26",
+    "@fortawesome/free-solid-svg-icons": "^5.12.0",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.19.0",
+    "bootstrap": "^4.4.1",
+    "electron-is-dev": "^1.1.0",
+    "jquery": "^3.4.1",
+    "moment": "^2.24.0",
+    "popper.js": "^1.16.0",
+    "pouchdb": "^7.1.1",
+    "pouchdb-adapter-idb": "^7.1.1",
+    "pouchdb-collate": "^7.1.1",
+    "pouchdb-core": "^7.1.1",
+    "react": "^16.12.0",
+    "react-day-picker": "^7.4.0",
+    "react-dom": "^16.12.0",
+    "react-hotkeys": "^2.0.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.3.0",
+    "react-select": "^3.0.8",
+    "react-switch": "^5.0.1"
+  },
+  "scripts": {
+    "start": "rescripts start",
+    "build": "rescripts build",
+    "test": "rescripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "electron-builder -mw"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
-    "@types/chai": "^3.4.34",
-    "@types/mocha": "^2.2.33",
-    "autoprefixer": "^6.4.0",
-    "babel-cli": "^6.11.4",
-    "babel-core": "^6.13.2",
-    "babel-loader": "^6.2.4",
-    "babel-polyfill": "^6.13.0",
-    "babel-preset-es2015": "^6.13.2",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-0": "^6.5.0",
-    "chai": "^3.5.0",
-    "concurrently": "^2.2.0",
-    "css-loader": "^0.23.1",
-    "electron-packager": "^7.5.1",
-    "electron-prebuilt": "^1.4.3",
-    "expect": "^1.20.2",
-    "express": "^4.14.0",
-    "file-loader": "^0.9.0",
-    "json-loader": "^0.5.4",
-    "karma": "^1.3.0",
-    "karma-chai": "^0.1.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-cli": "^1.0.1",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.1",
-    "karma-sinon": "^1.0.5",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-typescript-preprocessor2": "^1.2.1",
-    "karma-webpack": "^1.8.0",
-    "less": "^2.7.1",
-    "less-loader": "^2.2.3",
-    "leveldown": "^1.5.0",
-    "markdown-loader": "^0.1.7",
-    "mocha": "^3.2.0",
-    "postcss-loader": "^0.9.1",
-    "sinon": "^1.17.6",
-    "source-map-loader": "^0.1.5",
-    "style-loader": "^0.13.1",
-    "ts-loader": "^0.8.2",
-    "typescript": "^2.0.3",
-    "typings": "^1.3.2",
-    "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.12.2",
-    "webpack-target-electron-renderer": "^0.4.0"
+    "@rescripts/cli": "^0.0.13",
+    "@rescripts/rescript-env": "^0.0.11",
+    "concurrently": "^5.0.2",
+    "electron": "^7.1.7",
+    "electron-builder": "^22.2.0",
+    "typescript": "^3.7.4",
+    "wait-on": "^3.3.0"
   }
 }
