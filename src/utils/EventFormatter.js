@@ -1,10 +1,13 @@
 class EventFormatter {
 
-    formatEventDate(event){
-        if(event.begin_date_time){
-            let date = new Date(event.begin_date_time);
-            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear()
-        }else{
+    formatEventDate(event) {
+        if (!event) {
+            return '--/--/----';
+        }
+
+        if (event.date) {
+            return event.date;
+        } else {
             return 'Dia não definido.'
         }
     }

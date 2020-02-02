@@ -30,14 +30,7 @@ const { useReducer, useState } = React;
  */
 function App() {
     // contextualização
-    const [currentEvent, setCurrentEvent] = useState({
-        id: 2,
-        event_type: {
-            id: 2,
-            name: "Dia Normal"
-        },
-        begin_date_time: "2020-03-20 00:00:00"
-    });
+    const [currentEvent, setCurrentEvent] = useState(undefined);
 
     const [currentEventPresences, dispatchPresenceAction] = useReducer(
         presenceReducer,
@@ -50,7 +43,13 @@ function App() {
      * When the event is selected, fetches the presences from the db.
      */
     useEffect(() => {
-        PresenceService.findContextPresences(currentEvent.id).then(response => {
+        if (!currentEvent) {
+            return;
+        }
+
+        PresenceService.findContextPresences(
+            currentEvent._id || currentEvent.id
+        ).then(response => {
             dispatchPresenceAction({
                 type: "init",
                 list: response.docs || []
@@ -63,7 +62,10 @@ function App() {
             case "init":
                 return { list: action.list };
             case "add":
-                let newPresence = PresenceService.savePresence(action.person);
+                let newPresence = PresenceService.savePresence(
+                    action.person,
+                    currentEvent
+                );
                 state.list.push(newPresence);
                 return { list: state.list };
             case "remove":
@@ -153,7 +155,13 @@ function App() {
                             <SelfCheckInPage
                                 {...props}
                                 presenceList={currentEventPresences.list}
-                                dispatchPresenceAction={dispatchPresenceAction}
+                                dispatchPresenceAction={action => {
+                                    dispatchPresenceAction(action);
+                                }}
+                                setCurrentEvent={event => {
+                                    console.log("App.jsx chamado:" + event);
+                                    setCurrentEvent(event);
+                                }}
                             />
                         )}
                     />

@@ -17,7 +17,11 @@ import useDebounce from "../hooks/useDebounce";
  *
  * It's the main screen of the App, implementing an attendance book functionality.
  */
-function SelfCheckInPage({ presenceList, dispatchPresenceAction }) {
+function SelfCheckInPage({
+    presenceList,
+    dispatchPresenceAction,
+    setCurrentEvent
+}) {
     /**
      * Hook for person name search input
      */
@@ -92,7 +96,12 @@ function SelfCheckInPage({ presenceList, dispatchPresenceAction }) {
         >
             <div className="flex-fill d-flex flex-row">
                 <div className="col-4 mr-n2 flex-fill d-flex flex-column">
-                    <TodayEventWidget />
+                    <TodayEventWidget
+                        setCurrentEvent={event => {
+                            console.log("SelfCheckInPage chamado");
+                            setCurrentEvent(event);
+                        }}
+                    />
                     <PresenceListWidget presenceList={presenceList} />
                 </div>
                 <div className="flex-fill d-flex">

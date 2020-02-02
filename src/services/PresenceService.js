@@ -67,17 +67,6 @@ class PresenceService {
     }
 
     findYokoshiByName = async (searchToken, eventId) => {
-        let usedSearchTerm = searchToken;
-
-        // TODO: refatorar isso daqui; solucao paleativa!!
-        usedSearchTerm = usedSearchTerm.replace(' ', '.*');
-        usedSearchTerm = usedSearchTerm.replace('e', '[eéêè]');
-        usedSearchTerm = usedSearchTerm.replace('a', '[aãáäâ]');
-        usedSearchTerm = usedSearchTerm.replace('i', '[ií]');
-        usedSearchTerm = usedSearchTerm.replace('u', '[uúü]');
-        usedSearchTerm = usedSearchTerm.replace('o', '[oôö]');
-
-        // TODO: adaptar formato do json de resposta
         let db = await PouchDBProvider.getDb();
 
         // Regex performa mal: 
@@ -111,8 +100,7 @@ class PresenceService {
         }));
     }
 
-    savePresence(person) {
-        let event = ContextService.getCurrentContext().event;
+    savePresence(person, event) {
         // creating a new presence
         let newPresence = {
             person: person,

@@ -1,18 +1,16 @@
-import axios from 'axios'
+import PouchDBProvider from './PouchDBProvider';
 
 class EventTypeService {
 
-    findAll(){
-        return Promise.resolve({
-                objects:[
-                    {id: 1, name: 'Dia Normal'},
-                    {id: 2, name: 'Cerimônia Mensal'},
-                ],
-                pageSize:2,
-                currentPage:0,
-                count:2
-        })
+    async findAll() {
+        let db = await PouchDBProvider.getDb();
+
+        return db.find({
+            selector: {
+                type: 'eventType'
+            },
+        });
     }
 }
 
-export default new EventTypeService()
+export default new EventTypeService();
