@@ -88,14 +88,12 @@ class PresenceService {
         });
     }
 
-    async findContextPresences({
-        eventId
-    }) {
+    async findEventPresences(event) {
         // TODO: adaptar formato do json de resposta
         return PouchDBProvider.getDb().then(db => db.find({
             selector: {
                 type: 'presence',
-                "event.id": eventId
+                "event._id": event._id
             }
         }));
     }

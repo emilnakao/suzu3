@@ -6,13 +6,20 @@ function PresenceListWidget({ presenceList = [] }) {
     const firstTimeLabel = "1a VEZ";
     const mtaiLabel = "MTAI";
 
+    const isTrue = value => {
+        return (
+            value !== undefined &&
+            (value === true || value === "true" || value === "t")
+        );
+    };
+
     const countKumite = () => {
         return presenceList.filter(p => {
             if (!p.person) {
                 return false;
             }
 
-            return !p.person.is_mikumite;
+            return !isTrue(p.person.is_mikumite);
         }).length;
     };
 
@@ -22,7 +29,7 @@ function PresenceListWidget({ presenceList = [] }) {
                 return false;
             }
 
-            return p.person.is_mtai;
+            return isTrue(p.person.is_mtai);
         }).length;
     };
 
@@ -32,7 +39,7 @@ function PresenceListWidget({ presenceList = [] }) {
                 return false;
             }
 
-            return p.person.is_mikumite;
+            return isTrue(p.person.is_mikumite);
         }).length;
     };
 
@@ -42,7 +49,7 @@ function PresenceListWidget({ presenceList = [] }) {
                 return false;
             }
 
-            return p.person.is_mikumite;
+            return isTrue(p.person.is_mikumite);
         }).length;
     };
 

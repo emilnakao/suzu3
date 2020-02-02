@@ -26,7 +26,7 @@ class Okiyome extends Component {
             showKumite: true
         };
 
-        PresenceService.findContextPresences().then(result => {
+        PresenceService.findEventPresences().then(result => {
             console.log(result);
             this.setState({presences:result.objects});
         });

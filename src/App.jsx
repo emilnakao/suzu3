@@ -35,7 +35,8 @@ function App() {
     const [currentEventPresences, dispatchPresenceAction] = useReducer(
         presenceReducer,
         {
-            list: []
+            list: [],
+            lastPresence: undefined
         }
     );
 
@@ -47,27 +48,27 @@ function App() {
             return;
         }
 
-        PresenceService.findContextPresences(
-            currentEvent._id || currentEvent.id
-        ).then(response => {
+        PresenceService.findEventPresences(currentEvent).then(response => {
             dispatchPresenceAction({
                 type: "init",
                 list: response.docs || []
             });
         });
-    }, [currentEvent]);
+    }, [currentEvent, currentEventPresences.lastPresence]);
 
     function presenceReducer(state, action) {
         switch (action.type) {
             case "init":
-                return { list: action.list };
+                console.log(
+                    `Nova lista de presença: ${JSON.stringify(action.list)}`
+                );
+                return { ...state, list: action.list };
             case "add":
                 let newPresence = PresenceService.savePresence(
                     action.person,
                     currentEvent
                 );
-                state.list.push(newPresence);
-                return { list: state.list };
+                return { ...state, lastPresence: newPresence };
             case "remove":
                 let newList = state.list.filter(elem => {
                     if (!elem.person) {
