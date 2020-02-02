@@ -80,17 +80,33 @@ class PresenceService {
         // TODO: adaptar formato do json de resposta
         let db = await PouchDBProvider.getDb();
 
-
-        return db.find({
-            selector: {
-                type: 'yokoshi',
-                name: {
-                    $regex: new RegExp(usedSearchTerm, 'iu')
-                }
-            },
-            limit: 50,
-            use_index: 'type-name-index'
+        // Regex performa mal: 
+        return db.search({
+            query: searchToken,
+            fields: ['name'],
+            include_docs: true,
+            filter: function (doc) {
+                return doc.type === 'yokoshi';
+            }
+        }).then(result => {
+            let docs = [];
+            result.rows.forEach(row => {
+                docs.push(row.doc);
+            });
+            return Promise.resolve({
+                docs: docs
+            });
         });
+        // return db.find({
+        //     selector: {
+        //         type: 'yokoshi',
+        //         name: {
+        //             $regex: new RegExp(usedSearchTerm, 'iu')
+        //         }
+        //     },
+        //     limit: 50,
+        //     use_index: 'type-name-index'
+        // });
     }
 
     async findContextPresences({

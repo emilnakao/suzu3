@@ -10,6 +10,7 @@ import PresenceService from "../services/PresenceService";
 import { useInput } from "../hooks/useInput";
 import { useAsync } from "../hooks/useAsync";
 import SelfCheckInLine from "./SelfCheckInLine";
+import useDebounce from "../hooks/useDebounce";
 
 /**
  * Screen where the user searches for his name, and toggles his presence in the current event.
@@ -25,6 +26,11 @@ function SelfCheckInPage({ presenceList, dispatchPresenceAction }) {
     );
 
     /**
+     * Avoids querying for each character typed.
+     */
+    const debouncedSearchTerm = useDebounce(personSearchToken, 500);
+
+    /**
      * For usage with keyboard arrows up/down
      */
     const { focusIndex, updateFocusIndex } = useState(0);
@@ -34,8 +40,13 @@ function SelfCheckInPage({ presenceList, dispatchPresenceAction }) {
      */
     const personList = useAsync([
         PresenceService.findPerson,
-        personSearchToken
+        debouncedSearchTerm
     ]);
+
+    /**
+     * Feedback for async operations
+     */
+    const [loading, setLoading] = useState(false);
 
     /**
      * Keyboard shortcuts
