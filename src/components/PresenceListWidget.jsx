@@ -1,8 +1,8 @@
 import React from "react";
 
 function PresenceListWidget({ presenceList = [] }) {
-    const kumiteLabel = "KUMITE";
-    const mikumiteLabel = "MIKUMITE";
+    const kumiteLabel = "PRATICANTE";
+    const mikumiteLabel = "CONVIDADO";
     const firstTimeLabel = "1a VEZ";
     const mtaiLabel = "MTAI";
 

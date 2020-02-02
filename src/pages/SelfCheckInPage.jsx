@@ -91,7 +91,7 @@ function SelfCheckInPage({ presenceList, dispatchPresenceAction }) {
             className="container-fluid d-flex flex-fill bg-dark"
         >
             <div className="flex-fill d-flex flex-row">
-                <div className="col-3 mr-n2 flex-fill d-flex flex-column">
+                <div className="col-4 mr-n2 flex-fill d-flex flex-column">
                     <TodayEventWidget />
                     <PresenceListWidget presenceList={presenceList} />
                 </div>

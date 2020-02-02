@@ -42,7 +42,7 @@ class PouchDBProvider {
     async saveNew(id, document) {
 
         // a criação de id manualmente é uma boa prática para evitar índices secundários. Vide documentação do createId().
-        document._id = id;
+        document._id = `${document.type}::${id}`;
 
         // inserindo no banco
         return this.getDb().then(db => {
