@@ -3,7 +3,15 @@ import axios from 'axios'
 class EventTypeService {
 
     findAll(){
-        return axios.get('/api/v1/event_type/?format=json');
+        return Promise.resolve({
+                objects:[
+                    {id: 1, name: 'Dia Normal'},
+                    {id: 2, name: 'Cerimônia Mensal'},
+                ],
+                pageSize:2,
+                currentPage:0,
+                count:2
+        })
     }
 }
 

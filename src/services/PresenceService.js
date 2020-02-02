@@ -3,21 +3,48 @@ import Requester from "../Requester"
 import ContextService from "./ContextService";
 import PouchDBProvider from "./PouchDBProvider";
 
+/**
+ */
 class PresenceService {
 
-    // TODO: utilizar conceito de store? redux-like? como notificar atualizações?
-    currentEventPresences = [
-        {id:1, yokoshi: {id:1, complete_name:'Maria do Bairro', is_mtai:true, is_mikumite:false}, is_first_time:false},
-        {id:2, yokoshi: {id:2, complete_name:'Marimar', is_mtai:false, is_mikumite:true}, is_first_time:true}
-    ];
+    constructor() {
+        PouchDBProvider.getDb().then(db => {
+            db.createIndex({
+                index: {
+                    fields: ['type', 'name'],
+                    ddoc: 'type-name-index'
+                }
+            })
+        });
+    }
+
+    findYokoshiByInitials = async (initials, eventId) => {
+        let upperSearchToken = '.*[ ]';
+        // TODO: melhorar essa regex
+        let uppercaseSearchTerm = initials.replace(/(?=[A-Z])([A-Z]?)/g, upperSearchToken + "$1");
+        let searchTerm = uppercaseSearchTerm.substring(upperSearchToken.length) + '.*';
+
+        let db = await PouchDBProvider.getDb();
+
+        return db.find({
+            selector: {
+                type: 'yokoshi',
+                name: {
+                    $regex: new RegExp(searchTerm, 'iu')
+                }
+            },
+            limit: 50,
+            use_index: 'type-name-index'
+        });
+    }
 
     /**
      * Procura por yokoshis cujo nome satisfaça searchToken, incluindo no resultado se o yokoshi está presente ou não no evento corrente.
      * @param searchTerm
      */
-    findYokoshi(searchToken) {
-        // busca vazia: retorna lista vazia
-        if(!searchToken){
+    findPerson = async (searchToken) => {
+        // busca vazia: retorna lista vazia ou abaixo de 3 caracteres
+        if (!searchToken || searchToken.length < 3) {
             return [Promise.resolve(Requester.emptyGetResponse())]
         }
 
@@ -39,18 +66,9 @@ class PresenceService {
         }
     }
 
-    findYokoshiByInitials(initials, eventId){
-        let upperSearchToken = '.*[ ]';
-        // TODO: melhorar essa regex
-        let uppercaseSearchTerm = initials.replace(/(?=[A-Z])([A-Z]?)/g, upperSearchToken + "$1");
-        let searchTerm = uppercaseSearchTerm.substring(upperSearchToken.length) + '.*';
-
-        return Requester.get(`api/v1/presence_count/?format=json&event_id=${eventId}&complete_name__regex=${searchTerm}`)
-            .then(data => {return Requester.convertFromTastypie(data);});
-    }
-
-    findYokoshiByName(searchToken, eventId){
+    findYokoshiByName = async (searchToken, eventId) => {
         let usedSearchTerm = searchToken;
+
         // TODO: refatorar isso daqui; solucao paleativa!!
         usedSearchTerm = usedSearchTerm.replace(' ', '.*');
         usedSearchTerm = usedSearchTerm.replace('e', '[eéêè]');
@@ -58,28 +76,64 @@ class PresenceService {
         usedSearchTerm = usedSearchTerm.replace('i', '[ií]');
         usedSearchTerm = usedSearchTerm.replace('u', '[uúü]');
         usedSearchTerm = usedSearchTerm.replace('o', '[oôö]');
-        return Requester.get(`api/v1/presence_count/?format=json&event_id=${eventId}&complete_name__iregex=${usedSearchTerm}`)
-            .then(data => {return Requester.convertFromTastypie(data);});
+
+        // TODO: adaptar formato do json de resposta
+        let db = await PouchDBProvider.getDb();
+
+
+        return db.find({
+            selector: {
+                type: 'yokoshi',
+                name: {
+                    $regex: new RegExp(usedSearchTerm, 'iu')
+                }
+            },
+            limit: 50,
+            use_index: 'type-name-index'
+        });
     }
 
-    findContextPresences(){
-        let currentEventId = ContextService.getCurrentContext().event.id;
-        return Requester.get(`api/v1/presence/?format=json&event__id=${currentEventId}`).then(data => {return Requester.convertFromTastypie(data);});
+    async findContextPresences({
+        eventId
+    }) {
+        // TODO: adaptar formato do json de resposta
+        return PouchDBProvider.getDb().then(db => db.find({
+            selector: {
+                type: 'presence',
+                "event.id": eventId
+            }
+        }));
     }
 
-    registerPresence(yokoshi){
+    savePresence(person) {
+        let event = ContextService.getCurrentContext().event;
         // creating a new presence
         let newPresence = {
-            yokoshi: yokoshi,
-            event: ContextService.getCurrentContext().event,
-            is_first_time: false,
+            person: person,
+            type: 'presence',
+            event: event,
             begin_date_time: new Date()
         };
-        // adicionar
-        this.currentEventPresences.push(newPresence);
+
+        newPresence._id = this.calculatePresenceId(newPresence);
 
         // saving
-        PouchDBProvider.defaultInstance().saveNew(newPresence);
+        PouchDBProvider.getDb().then(db => {
+            db.post(newPresence)
+        });
+
+        return newPresence;
+    }
+
+    removePresence(presence) {
+
+        PouchDBProvider.getDb().then(db => {
+            db.remove(presence);
+        });
+    }
+
+    calculatePresenceId(presence) {
+        return `${presence.person._id}_${presence.event._id}`
     }
 }
 

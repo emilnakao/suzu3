@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SelfCheckIn from "./SelfCheckIn";
+import SelfCheckIn from "./SelfCheckInPage";
 import PresenceService from "../services/PresenceService";
 
 it('renders without crashing', () => {

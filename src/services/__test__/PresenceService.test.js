@@ -1,33 +1,29 @@
-import Requester from "../Requester";
-import PresenceService from "./PresenceService";
-import SessionService from "./ContextService";
-import NotificationService from "./NotificationService";
+import Requester from "../../Requester";
+import PresenceService from "../PresenceService";
+import SessionService from "../ContextService";
+import NotificationService from "../NotificationService";
 
 it('findYokoshi: returns empty array for null search token', () => {
     return PresenceService.findYokoshi(null).then(data=>{
-        expect(data.objects).toEqual([]);
+        expect(data.docs).toEqual([]);
     })
 });
 
 it('findYokoshi: returns empty array for undefined search token', () => {
     return PresenceService.findYokoshi(undefined).then(data=>{
-        expect(data.objects).toEqual([]);
+        expect(data.docs).toEqual([]);
     })
 });
 
 it('findYokoshi: returns empty array for empty search token', () => {
     return PresenceService.findYokoshi('').then(data=>{
-        expect(data.objects).toEqual([]);
+        expect(data.docs).toEqual([]);
     })
 });
 
 it('findYokoshi: returns non empty object for null response', () => {
-    let tastypieResponse = { data: {
-        objects:[{id:1, complete_name:'Fulano'}]
-    }};
-    const spy = jest.spyOn(Requester, 'get').mockImplementation(() => Promise.resolve(tastypieResponse));
     return PresenceService.findYokoshi('Fulano').then(data => {
-        expect(data.objects).toEqual([{id:1, complete_name:'Fulano'}]);
+        expect(data.docs).toEqual([{id:1, complete_name:'Fulano'}]);
         expect(spy).toHaveBeenCalled()
     })
 });
@@ -51,7 +47,7 @@ it.skip('findYokoshi: searches for initials when all letters are uppercase', () 
 });
 
 it.skip('findYokoshi: executes like search if any letter is lowercase', () => {
-    const spyPresenceService = require('./PresenceService');
+    const spyPresenceService = require('../PresenceService');
     spyPresenceService.findYokoshiByName = jest.fn();
 
     return spyPresenceService.findYokoshi('Lee').then(() => {

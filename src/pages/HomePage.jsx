@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 
-class Home extends Component {
+class HomePage extends Component {
     render(){
         return (
             <div role="main" className="text-center w-100 vh-100 jumbotron">
@@ -14,4 +14,4 @@ class Home extends Component {
     }
 }
 
-export default Home
+export default HomePage

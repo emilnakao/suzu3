@@ -6,6 +6,8 @@
  *
  * @author emil
  * @since 1.0
+ * 
+ * @deprecated state managed in App.js
  */
 class ContextService {
 
@@ -31,7 +33,7 @@ class ContextService {
                     id: 2,
                     name: 'Dia Normal'
                 },
-                begin_date_time: '2019-03-20 00:00:00'
+                begin_date_time: '2020-03-20 00:00:00'
             }
         }
     }

@@ -27,8 +27,10 @@ class EventService {
     }
 
     findOrCreateEventToday(eventType){
-        return Requester.post(`/attendancebook/find_or_create_event_for_today/?event_type_id=${eventType}`)
-            .then(data => {return Requester.convertFromTastypie(data);});
+        return Promise.resolve({
+            event_type: eventType,
+            date: moment().format('yyyy-MM-dd')
+        })
     }
 }
 

@@ -36,3 +36,46 @@
     transform: rotate(360deg);
   }
 }
+
+
+div.suzu-checkin-row {
+  border-color: #152820;
+  margin: 0;
+  padding: 10px;
+}
+
+div.suzu-checkin-row:nth-child(even){
+  background-color: #CAE3D9;
+}
+
+div.suzu-checkin-row:nth-child(odd){
+  background-color: #F2F8F5;
+}
+
+div.suzu-checkin-row.highlight{
+  background-color: #ffffff;
+  border: 2px dashed #5DA30C;
+}
+div.suzu-checkin-row.highlight .btn-success:after, div.suzu-checkin-row.highlight .btn-danger:after{
+  content:" \23CE"
+
+}
+.suzu-checkin-row h4 {
+  color: #34789a;
+}
+
+.presence-counter {
+  font-size: 2em;
+  text-align: center;
+  color: white;
+  padding: 2px;
+  font-weight: bold;
+}
+
+.presence-label {
+  color: white;
+  text-align: center;
+  padding: 1px;
+  font-size: smaller;
+}
+

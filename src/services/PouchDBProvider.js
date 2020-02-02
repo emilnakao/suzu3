@@ -1,32 +1,32 @@
 import PouchDB from 'pouchdb';
-import * as idbadapter from 'pouchdb-adapter-idb'
-PouchDB.plugin(idbadapter);
+import PouchDBFind from 'pouchdb-find';
 
 /**
  * Encapsulates database connection details. Data Access Object.
  *
  * @since 1.0
  */
-export default class PouchDBProvider {
-
-    static instance = new PouchDBProvider('suzudb');
-
-    db;
-
+class PouchDBProvider {
+    
     /**
      * Encapsulates the db
      */
     constructor(databaseName){
-        // usando IndexedDB como backend
-        this.db = new PouchDB(databaseName, {adapter:'idb'});
+        PouchDB.plugin(PouchDBFind);
+    }
+    
+    async getDb(){
+        let db = new PouchDB('suzudb');
+        await db.info()
+        return Promise.resolve(db);
     }
 
-    /**
-     *
-     * @returns {PouchDBProvider}
-     */
-    static defaultInstance(){
-        return PouchDBProvider.instance;
+    convertResponseToSimpleArray(pouchDBResponse){
+        if(pouchDBResponse && pouchDBResponse.docs){
+            return pouchDBResponse.docs;
+        }
+
+        return [];
     }
 
     /**
@@ -35,13 +35,13 @@ export default class PouchDBProvider {
      * @param document
      * @returns {void|IDBRequest|Promise<Core.Response>}
      */
-    saveNew(document){
+    async saveNew(id, document){
 
         // a criação de id manualmente é uma boa prática para evitar índices secundários. Vide documentação do createId().
-        document._id = document.createId();
+        document._id = id;
 
         // inserindo no banco
-        return this.db.put(document);
+        return this.getDb().then(db => {return db.put(document)});
     }
 
     findOrCreate(query, newDocument){
@@ -53,14 +53,9 @@ export default class PouchDBProvider {
      * @param document
      * @returns {void|IDBRequest|Promise<Core.Revision<Content>[]>|Promise<Core.Document<Content>&Core.GetMeta>|undefined|V|any}
      */
-    findUnique(document){
-        let id = document.createId();
-
-        return this.db.get(id);
+    async findUnique(id){
+        return this.getDb().then(db => {return db.get(id)});
     }
-
-    list(params){
-
-    }
-
 }
+
+export default new PouchDBProvider('suzudb');
