@@ -34,12 +34,15 @@ function SelfCheckInLine({
     };
 
     const isCancelPresenceDisabled = () => {
-        // check is
-        return true;
+        return findPersonPresence() === undefined;
     };
 
     const findPersonPresence = () => {
         let candidates = presenceList.filter(elem => {
+            if (!elem.person) {
+                return false;
+            }
+
             return elem.person.id === person.id;
         });
 
@@ -75,6 +78,7 @@ function SelfCheckInLine({
             <button
                 className="suzu-checkin-row-presencebtn btn btn-success float-right my-auto"
                 onClick={handleConfirmPresence}
+                disabled={!isCancelPresenceDisabled()}
             >
                 <FontAwesomeIcon icon={faCheck} /> Marcar Presença
             </button>

@@ -68,6 +68,10 @@ function App() {
                 return { list: state.list };
             case "remove":
                 let newList = state.list.filter(elem => {
+                    if (!elem.person) {
+                        return true; // ignores wrong data
+                    }
+
                     return elem.person.id !== action.person.id;
                 });
                 state.list = newList;
@@ -121,12 +125,7 @@ function App() {
                                 </a>
                             </li>
                             {/*<liclassName="nav-item"><aclassName="nav-link"href="/okiyome"><FontAwesomeIconicon={faCheck}/>Okiyome</a></li>*/}
-                            <li className="nav-item">
-                                <a className="nav-link" href="/admin">
-                                    <FontAwesomeIcon icon={faCheck} />
-                                    Admin
-                                </a>
-                            </li>
+
                             {/*<liclassName="nav-itemdropdown">*/}
                             {/*<aclassName="nav-linkdropdown-toggle"href="/"id="operationDropdown"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">Operações</a>*/}
                             {/*<divclassName="dropdown-menu"aria-labelledby="operationDropdown">*/}

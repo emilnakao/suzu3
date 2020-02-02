@@ -97,16 +97,6 @@ class PresenceService {
                 docs: docs
             });
         });
-        // return db.find({
-        //     selector: {
-        //         type: 'yokoshi',
-        //         name: {
-        //             $regex: new RegExp(usedSearchTerm, 'iu')
-        //         }
-        //     },
-        //     limit: 50,
-        //     use_index: 'type-name-index'
-        // });
     }
 
     async findContextPresences({
