@@ -98,12 +98,18 @@ class PresenceService {
         }));
     }
 
-    savePresence(person, event) {
+    savePresence({
+        person,
+        event,
+        isFirstTime
+    }) {
         // creating a new presence
         let newPresence = {
             person: person,
             type: 'presence',
             event: event,
+            isFirstTime: isFirstTime,
+            dateTime: new Date(),
             begin_date_time: new Date()
         };
 

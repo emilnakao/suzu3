@@ -155,6 +155,7 @@ function App() {
                         render={props => (
                             <SelfCheckInPage
                                 {...props}
+                                currentEvent={currentEvent}
                                 presenceList={currentEventPresences.list}
                                 dispatchPresenceAction={action => {
                                     dispatchPresenceAction(action);

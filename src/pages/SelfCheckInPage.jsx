@@ -11,6 +11,8 @@ import { useInput } from "../hooks/useInput";
 import { useAsync } from "../hooks/useAsync";
 import SelfCheckInLine from "./SelfCheckInLine";
 import useDebounce from "../hooks/useDebounce";
+import CreatePersonModal from "../components/CreatePersonModal";
+import PersonService from "../services/PersonService";
 
 /**
  * Screen where the user searches for his name, and toggles his presence in the current event.
@@ -20,7 +22,8 @@ import useDebounce from "../hooks/useDebounce";
 function SelfCheckInPage({
     presenceList,
     dispatchPresenceAction,
-    setCurrentEvent
+    setCurrentEvent,
+    currentEvent
 }) {
     /**
      * Hook for person name search input
@@ -52,6 +55,8 @@ function SelfCheckInPage({
      */
     const [loading, setLoading] = useState(false);
 
+    const [showCreatePersonModal, setShowCreatePersonModal] = useState(false);
+
     /**
      * Keyboard shortcuts
      * @see https://github.com/greena13/react-hotkeys
@@ -82,9 +87,51 @@ function SelfCheckInPage({
         [focusIndex, updateFocusIndex]
     );
 
+    /**
+     * Handler for Enter press. The action triggered depends on the current page state.
+     *
+     */
+    const confirmAction = useCallback(
+        event => {
+            // No person found. Should register a new one.
+            if (!personList || personList.length === 0) {
+                setShowCreatePersonModal(true);
+            }
+            // The person was here before. Just confirms/cancel his presence.
+            else {
+            }
+        },
+        [personList, setShowCreatePersonModal]
+    );
+
+    /**
+     * Maps keys to handler functions. Required parameter for the react-hotkeys component.
+     */
     const handlers = {
         MOVE_ROW_FOCUS_UP: moveRowFocusUp,
-        MOVE_ROW_FOCUS_DOWN: moveRowFocusDown
+        MOVE_ROW_FOCUS_DOWN: moveRowFocusDown,
+        CONFIRM: confirmAction
+    };
+
+    /**
+     *
+     * @param {person, isFirstTime}
+     */
+    const handleNewPresence = async ({ person, isFirstTime }) => {
+        let savedPerson = person;
+
+        if (!person._id) {
+            console.log(
+                "A new person was registered. Saving before confirming presence."
+            );
+            savedPerson = await PersonService.save(person);
+        }
+
+        PresenceService.savePresence({
+            person: savedPerson,
+            event: this.currentEvent,
+            isFirstTime: isFirstTime
+        });
     };
 
     return (
@@ -149,6 +196,16 @@ function SelfCheckInPage({
                     </div>
                 </div>
             </div>
+            <CreatePersonModal
+                show={showCreatePersonModal}
+                nameSuggestion={personSearchToken}
+                handleClose={() => {
+                    setShowCreatePersonModal(false);
+                }}
+                handleConfirm={args => {
+                    handleNewPresence(args);
+                }}
+            />
         </HotKeys>
     );
 }
