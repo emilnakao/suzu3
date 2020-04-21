@@ -5,47 +5,49 @@ import PouchDBProvider from "../PouchDBProvider";
  */
 describe('PouchDBProvider', () => {
 
-    beforeEach(async ()=> {
-       
-    });
+    let db
 
-    it('saves a new entity into db', (done) => {
-        let newEventType = {name:"Ceremony"};
+    beforeEach(async () => {
+        db = PouchDBProvider.create('testPouchDBProvider')
+    })
 
-        PouchDBProvider.saveNew('ceremony', newEventType).then((result)=>{
-           expect(result.ok).toEqual(true);
-           done();
-        }).catch((error) => { 
-            done(error);
-        });
-    });
+    it('Provides a new db', () => {
+        expect(db.name).toEqual('testPouchDBProvider')
+    })
 
-    it('finds an unique entity calculating id :: entity exists', (done) => {
-       let newEventType = {name:"Normal Day"};
+    it('Converts a response from allDocs', async () => {
+        // saving document for test scenario
+        let doc = {
+            "_id": "1",
+            "name": "Florence"
+        }
 
-       PouchDBProvider.saveNew('normalDay', newEventType).then(()=>{
-           return PouchDBProvider.findUnique('normalDay').then((findUniqueResult)=>{
-               expect(findUniqueResult.name).toEqual('Normal Day');
-               done();
-           });
-       }).catch((error) => {
-           done(error);
-       });
+        let putResponse = await db.put(doc)
 
-    });
+        expect(putResponse.ok).toEqual(true)
 
-    afterEach(() => {
-        
-        PouchDBProvider.getDb().then(db => {db.allDocs().then(function (result) {
-            // Promise isn't supported by all browsers; you may want to use bluebird
-            return Promise.all(result.rows.map(function (row) {
-                return db.remove(row.id, row.value.rev);
-            }));
-        })}).then(function () {
-            // done!
-        }).catch(function (err) {
-            // error!
-        });
-    });
+        let response = await db.allDocs({
+            include_docs: true
+        })
+        let responseArray = PouchDBProvider.convertResponseToSimpleArray(response)
+
+        expect(responseArray.length).toEqual(1)
+        expect(responseArray[0]._id).toEqual(doc._id)
+
+    })
+
+    it('Accepts empty response from allDocs', async () => {
+        let response = await db.allDocs({
+            include_docs: true
+        })
+
+        let responseArray = PouchDBProvider.convertResponseToSimpleArray(response)
+
+        expect(responseArray.length).toEqual(0)
+    })
+
+    afterEach(async () => {
+        await db.destroy()
+    })
 
 })

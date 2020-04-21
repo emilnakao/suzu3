@@ -1,18 +1,17 @@
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import CSVImporter from "../services/CSVImporter";
+import React from "react";
 import FileUpload from "../components/FileUpload";
+import CSVImporter from "../services/CSVImporter";
 
 /**
  *
  * @param {*} props
  */
 function AdminPage(props) {
-    const loadPersonCSV = filePath => {
+    const loadPersonCSV = (filePath) => {
         CSVImporter.importPerson(filePath);
     };
 
-    const loadEventTypeCSV = filePath => {
+    const loadEventTypeCSV = (filePath) => {
         CSVImporter.importEventType(filePath);
     };
 

@@ -1,30 +1,42 @@
-import fs from 'fs';
 import {
     parse
-} from 'csv'
-import PouchDBProvider from './PouchDBProvider';
-import {
-    toast
-} from 'react-toastify';
+} from 'csv';
+import fs from 'fs';
 
-class CSVImporter {
+import IdGenerator from './IdGenerator';
+import PouchDBProvider from './PouchDBProvider';
+import NotificationService from './NotificationService';
+
+export class CSVImporter {
+
+    db
+
+    constructor(databaseName) {
+        this.db = PouchDBProvider.create(databaseName)
+    }
 
     importPerson = async (filePath) => {
-        return this.importDocument('person', filePath);
+        return this.importDocument('person', filePath, (person) => {
+            return IdGenerator.generatePersonId(person)
+        });
     }
 
     importEventType = async (filePath) => {
-        return this.importDocument('eventType', filePath);
+        return this.importDocument('eventType', filePath, (eventType) => {
+            return IdGenerator.generateEventTypeId(eventType)
+        });
     }
 
     importHan = async (filePath) => {
-        return this.importDocument('han', filePath);
+        return this.importDocument('han', filePath, (han) => {
+            return IdGenerator.generateHanId(han)
+        });
     }
 
     /**
      * Loads a .csv file and saves person registries in the db.
      */
-    importDocument = async (type, filePath) => {
+    importDocument = async (type, filePath, generateIdFn) => {
         let data = fs.readFileSync(filePath, 'utf-8');
 
         return new Promise((resolve, reject) => {
@@ -36,21 +48,22 @@ class CSVImporter {
                     let saveNewPromises = [];
 
                     records.forEach(element => {
-                        saveNewPromises.push(PouchDBProvider.saveNew(element.id, {
+                        saveNewPromises.push(this.db.put({
+                            _id: generateIdFn(element),
                             type: type,
                             ...element
                         }));
                     });
 
                     resolve(Promise.all(saveNewPromises).catch(e => {
-                        toast.error(`Erro ao carregar o arquivo: ${e.message}`);
+                        NotificationService.error(`Erro ao carregar o arquivo: ${e.message}`);
                     }));
                 } else if (!err) {
                     resolve([]);
                 }
 
                 if (err) {
-                    toast.error(err.message);
+                    NotificationService.error(err.message);
                     reject(err);
                 }
             });
@@ -63,4 +76,4 @@ class CSVImporter {
 
 }
 
-export default new CSVImporter();
+export default new CSVImporter(PouchDBProvider.getDefaultDatabaseName())

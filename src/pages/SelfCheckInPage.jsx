@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useCallback } from "react";
-import TodayEventWidget from "../components/TodayEventWidget";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import PresenceListWidget from "../components/PresenceListWidget";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useCallback, useState } from "react";
 import { HotKeys } from "react-hotkeys";
-import PresenceService from "../services/PresenceService";
-import { useInput } from "../hooks/useInput";
-import { useAsync } from "../hooks/useAsync";
-import SelfCheckInLine from "./SelfCheckInLine";
-import useDebounce from "../hooks/useDebounce";
 import CreatePersonModal from "../components/CreatePersonModal";
-import PersonService from "../services/PersonService";
+import PresenceListWidget from "../components/PresenceListWidget";
+import TodayEventWidget from "../components/TodayEventWidget";
+import { useAsync } from "../hooks/useAsync";
+import useDebounce from "../hooks/useDebounce";
+import { useInput } from "../hooks/useInput";
+import PersonRepository from "../services/PersonRepository";
+import SelfCheckInLine from "./SelfCheckInLine";
 
 /**
  * Screen where the user searches for his name, and toggles his presence in the current event.
@@ -23,7 +20,7 @@ function SelfCheckInPage({
     presenceList,
     dispatchPresenceAction,
     setCurrentEvent,
-    currentEvent
+    currentEvent,
 }) {
     /**
      * Hook for person name search input
@@ -40,14 +37,14 @@ function SelfCheckInPage({
     /**
      * For usage with keyboard arrows up/down
      */
-    const { focusIndex, updateFocusIndex } = useState(0);
+    const [focusIndex, updateFocusIndex] = useState(0);
 
     /**
      * List of name suggestions according to what the user types.
      */
     const personList = useAsync([
-        PresenceService.findPerson,
-        debouncedSearchTerm
+        PersonRepository.findPerson,
+        debouncedSearchTerm,
     ]);
 
     /**
@@ -64,24 +61,23 @@ function SelfCheckInPage({
     const keyMap = {
         MOVE_ROW_FOCUS_UP: "up",
         MOVE_ROW_FOCUS_DOWN: "down",
-        CONFIRM: "enter"
+        CONFIRM: "enter",
     };
 
-    const moveRowFocusUp = useCallback(
-        event => {
-            let maxFocusIndex = personList.length;
-            let newFocusIndex =
-                focusIndex + 1 < maxFocusIndex
-                    ? focusIndex + 1
-                    : maxFocusIndex - 1;
+    const moveRowFocusDown = useCallback(
+        (event) => {
+            let newFocusIndex = focusIndex + 1;
+
+            console.log(`KeyDown: focusIndex ${newFocusIndex}`);
             updateFocusIndex(newFocusIndex);
         },
-        [focusIndex, updateFocusIndex, personList]
+        [focusIndex, updateFocusIndex]
     );
 
-    const moveRowFocusDown = useCallback(
-        event => {
+    const moveRowFocusUp = useCallback(
+        (event) => {
             let newFocusIndex = focusIndex - 1 < 0 ? 0 : focusIndex - 1;
+            console.log(`KeyUp: focusIndex ${newFocusIndex}`);
             updateFocusIndex(newFocusIndex);
         },
         [focusIndex, updateFocusIndex]
@@ -92,7 +88,11 @@ function SelfCheckInPage({
      *
      */
     const confirmAction = useCallback(
-        event => {
+        (event) => {
+            if (!currentEvent) {
+                return;
+            }
+
             // No person found. Should register a new one.
             if (!personList || personList.length === 0) {
                 setShowCreatePersonModal(true);
@@ -101,7 +101,7 @@ function SelfCheckInPage({
             else {
             }
         },
-        [personList, setShowCreatePersonModal]
+        [personList, currentEvent, setShowCreatePersonModal]
     );
 
     /**
@@ -110,7 +110,7 @@ function SelfCheckInPage({
     const handlers = {
         MOVE_ROW_FOCUS_UP: moveRowFocusUp,
         MOVE_ROW_FOCUS_DOWN: moveRowFocusDown,
-        CONFIRM: confirmAction
+        CONFIRM: confirmAction,
     };
 
     /**
@@ -124,13 +124,13 @@ function SelfCheckInPage({
             console.log(
                 "A new person was registered. Saving before confirming presence."
             );
-            savedPerson = await PersonService.save(person);
+            savedPerson = await PersonRepository.save(person);
         }
 
-        PresenceService.savePresence({
+        dispatchPresenceAction({
+            type: "add",
             person: savedPerson,
-            event: this.currentEvent,
-            isFirstTime: isFirstTime
+            isFirstTime: isFirstTime,
         });
     };
 
@@ -144,7 +144,8 @@ function SelfCheckInPage({
             <div className="flex-fill d-flex flex-row">
                 <div className="col-4 mr-n2 flex-fill d-flex flex-column">
                     <TodayEventWidget
-                        setCurrentEvent={event => {
+                        currentEvent={currentEvent}
+                        setCurrentEvent={(event) => {
                             console.log("SelfCheckInPage chamado");
                             setCurrentEvent(event);
                         }}
@@ -163,34 +164,52 @@ function SelfCheckInPage({
                                 className="form-control form-control-lg mb-2"
                                 placeholder="Digite seu nome aqui"
                                 autoFocus={true}
+                                disabled={!currentEvent}
                                 {...bindPersonSearchToken}
                             />
 
-                            {/* Caso nenhuma sugestão tenha sido encontrada, mostra msg */}
-                            {(!personList || personList.length === 0) && (
+                            {/* Case when no event is selected */}
+                            {!currentEvent && (
                                 <div>
                                     <div className="text-center v-100">
                                         <i>
-                                            Não encontrou seu nome? Aperte Enter
-                                            para cadastrar.
+                                            Crie um evento para o dia de hoje,
+                                            ou selecione um existente.
                                         </i>
                                     </div>
                                 </div>
                             )}
 
+                            {/* Caso nenhuma sugestão tenha sido encontrada, mostra msg */}
+                            {currentEvent &&
+                                (!personList || personList.length === 0) && (
+                                    <div>
+                                        <div className="text-center v-100">
+                                            <i>
+                                                Não encontrou seu nome? Aperte
+                                                Enter para cadastrar.
+                                            </i>
+                                        </div>
+                                    </div>
+                                )}
+
                             {/* Lista de opções de nomes */}
                             {personList &&
-                                personList.map(function(person, index) {
-                                    return (
-                                        <SelfCheckInLine
-                                            person={person}
-                                            isFocused={index === focusIndex}
-                                            presenceList={presenceList}
-                                            dispatchPresenceAction={
-                                                dispatchPresenceAction
-                                            }
-                                        />
-                                    );
+                                personList.map(function (person, index) {
+                                    if (person) {
+                                        return (
+                                            <SelfCheckInLine
+                                                person={person}
+                                                isFocused={index === focusIndex}
+                                                presenceList={presenceList}
+                                                dispatchPresenceAction={
+                                                    dispatchPresenceAction
+                                                }
+                                            />
+                                        );
+                                    } else {
+                                        return undefined;
+                                    }
                                 })}
                         </div>
                     </div>
@@ -202,7 +221,7 @@ function SelfCheckInPage({
                 handleClose={() => {
                     setShowCreatePersonModal(false);
                 }}
-                handleConfirm={args => {
+                handleConfirm={(args) => {
                     handleNewPresence(args);
                 }}
             />

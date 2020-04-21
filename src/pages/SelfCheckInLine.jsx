@@ -1,35 +1,35 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faMinusSquare,
     faCheck,
-    faPencilAlt
+    faMinusSquare,
+    faPencilAlt,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import { toast } from "react-toastify";
 
 function SelfCheckInLine({
     person,
     isFocused,
     presenceList,
-    dispatchPresenceAction
+    dispatchPresenceAction,
 }) {
-    const handleConfirmPresence = e => {
+    const handleConfirmPresence = (e) => {
         toast.info("Presença confirmada para " + JSON.stringify(person));
         dispatchPresenceAction({
             type: "add",
-            person: person
+            person: person,
         });
     };
 
-    const handleCancelPresence = e => {
+    const handleCancelPresence = (e) => {
         toast.info("Presença cancelada para " + JSON.stringify(person));
         dispatchPresenceAction({
             type: "remove",
-            presence: findPersonPresence()
+            presence: findPersonPresence(),
         });
     };
 
-    const handleStartPersonEdit = e => {
+    const handleStartPersonEdit = (e) => {
         toast.info("Iniciando edição para " + JSON.stringify(person));
     };
 
@@ -38,7 +38,7 @@ function SelfCheckInLine({
     };
 
     const findPersonPresence = () => {
-        let candidates = presenceList.filter(elem => {
+        let candidates = presenceList.filter((elem) => {
             if (!elem.person) {
                 return false;
             }

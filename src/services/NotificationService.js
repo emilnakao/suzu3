@@ -1,3 +1,7 @@
+import {
+    toast
+} from 'react-toastify';
+
 /**
  *
  * @author emil
@@ -5,11 +9,11 @@
  */
 class NotificationService {
 
-    error(title, message){
+    error(title, message) {
 
     }
 
-    success(title, message){
+    success(title, message) {
 
     }
 }

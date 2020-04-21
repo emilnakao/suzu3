@@ -20,7 +20,7 @@ export default function CreatePersonModal({
         toast.info(`Nome: ${name}, ${presenceType}, ${isMtai}`);
         handleConfirm({
             person: {
-                name: name,
+                name: name || nameSuggestion,
                 isKumite: presenceType === "kumite",
                 isMtai: isMtai
             },
@@ -41,7 +41,7 @@ export default function CreatePersonModal({
                     <Form.Control
                         type="text"
                         placeholder="Digite o nome"
-                        defaultValue={name}
+                        defaultValue={nameSuggestion}
                         onChange={e => {
                             setName(e.target.value);
                         }}

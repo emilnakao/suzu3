@@ -1,25 +1,16 @@
-import Popper from "popper.js"; // eslint-disable-line no-unused-vars
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-
-import React, { useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import "./App.css";
-
+import { faCheck, faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faHome,
-    faCheck,
-    faMapMarkerAlt,
-    faUserAlt
-} from "@fortawesome/free-solid-svg-icons";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
+import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
 import SelfCheckInPage from "./pages/SelfCheckInPage";
-import Okiyome from "./pages/Okiyome";
-import AdminPage from "./pages/AdminPage";
-import PresenceService from "./services/PresenceService";
+import PresenceRepository from "./services/PresenceRepository";
 
 const { useReducer, useState } = React;
 
@@ -36,7 +27,7 @@ function App() {
         presenceReducer,
         {
             list: [],
-            lastPresence: undefined
+            lastPresence: undefined,
         }
     );
 
@@ -48,10 +39,10 @@ function App() {
             return;
         }
 
-        PresenceService.findEventPresences(currentEvent).then(response => {
+        PresenceRepository.findEventPresences(currentEvent).then((response) => {
             dispatchPresenceAction({
                 type: "init",
-                list: response.docs || []
+                list: response.docs || [],
             });
         });
     }, [currentEvent, currentEventPresences.lastPresence]);
@@ -64,21 +55,24 @@ function App() {
                 );
                 return { ...state, list: action.list };
             case "add":
-                let newPresence = PresenceService.savePresence(
-                    action.person,
-                    currentEvent
-                );
+                let newPresence = PresenceRepository.savePresence({
+                    person: action.person,
+                    isFirstTime: action.isFirstTime,
+                    event: currentEvent,
+                });
                 return { ...state, lastPresence: newPresence };
             case "remove":
-                let newList = state.list.filter(elem => {
+                let newList = state.list.filter((elem) => {
                     if (!elem.person) {
                         return true; // ignores wrong data
                     }
 
-                    return elem.person.id !== action.person.id;
+                    return elem.person._id !== action.presence.person._id;
                 });
-                state.list = newList;
-                return state;
+
+                PresenceRepository.removePresence(action.presence);
+
+                return { ...state, list: newList };
             default:
                 return state;
         }
@@ -152,15 +146,15 @@ function App() {
                     <Route
                         exact
                         path="/selfCheckIn"
-                        render={props => (
+                        render={(props) => (
                             <SelfCheckInPage
                                 {...props}
-                                currentEvent={currentEvent}
                                 presenceList={currentEventPresences.list}
-                                dispatchPresenceAction={action => {
+                                dispatchPresenceAction={(action) => {
                                     dispatchPresenceAction(action);
                                 }}
-                                setCurrentEvent={event => {
+                                currentEvent={currentEvent}
+                                setCurrentEvent={(event) => {
                                     console.log("App.jsx chamado:" + event);
                                     setCurrentEvent(event);
                                 }}

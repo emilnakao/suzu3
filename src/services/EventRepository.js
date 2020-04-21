@@ -1,7 +1,21 @@
-import moment from 'moment';
+import IdGenerator from './IdGenerator';
 import PouchDBProvider from "./PouchDBProvider";
+import {
+    formatDate
+} from './StringUtils';
 
-class EventService {
+export class EventRepository {
+
+    db
+
+    constructor() {
+        this.db = PouchDBProvider.create(PouchDBProvider.getDefaultDatabaseName())
+    }
+
+    static getDocType() {
+        return 'event'
+    }
+
     /**
      * Eventos por dia e tipo
      * @param day
@@ -9,14 +23,13 @@ class EventService {
      * @returns {Promise.<void>}
      */
     async findEvents(date, eventTypeId) {
-        let db = await PouchDBProvider.getDb();
-        let formattedDate = this.formatDate(date);
+        let formattedDate = formatDate(date);
 
         console.log(`Buscando eventos do tipo ${eventTypeId} e data ${formattedDate}`);
 
-        return db.find({
+        return this.db.find({
             selector: {
-                type: 'event',
+                type: EventRepository.getDocType(),
                 date: {
                     '$eq': formattedDate
                 },
@@ -38,22 +51,22 @@ class EventService {
 
         // if an event of same type still does not exist, create:
         let newEvent = {
-            type: 'event',
-            event_type: eventType,
-            date: this.formatDate(new Date())
+            type: EventRepository.getDocType(),
+            eventType: eventType,
+            date: formatDate(new Date())
         };
 
-        let savedDoc = await PouchDBProvider.saveNew(`${eventType.id}-${newEvent.date}`, newEvent);
-        console.log(`findOrCreateEventToday retornando evento recém criado: ${JSON.stringify(savedDoc)}`);
+        newEvent._id = IdGenerator.generateEventId(newEvent)
+
+        this.db.put(newEvent);
+        console.log(`findOrCreateEventToday retornando evento recém criado: ${JSON.stringify(newEvent)}`);
         return Promise.resolve({
             ...newEvent,
-            id: savedDoc.id
+            id: newEvent._id
         });
     }
 
-    formatDate(date) {
-        return moment(date).format('YYYY-MM-DD');
-    }
+
 }
 
-export default new EventService();
+export default new EventRepository();

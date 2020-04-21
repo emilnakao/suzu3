@@ -12,10 +12,13 @@ export default function TodayEventWidget({ currentEvent, setCurrentEvent }) {
         EventFormatter.formatEventDate(currentEvent)
     );
 
-    const selectEvent = event => {
+    const [showCreateEventModal, setShowCreateEventModal] = useState(false);
+    const [showSelectEventModal, setShowSelectEventModal] = useState(false);
+
+    const selectEvent = (event) => {
         console.log(`TodayEventWidget chamado ${JSON.stringify(event)}`);
         setCurrentEvent(event);
-        setCurrentEventName(event.event_type.name);
+        setCurrentEventName(event.eventType.name);
         setCurrentEventDate(EventFormatter.formatEventDate(event));
     };
 
@@ -29,26 +32,34 @@ export default function TodayEventWidget({ currentEvent, setCurrentEvent }) {
             <div className="card-footer">
                 <button
                     className="btn-sm btn-outline-dark float-left"
-                    data-toggle="modal"
-                    data-target="#selectEventModal"
+                    onClick={() => {
+                        setShowSelectEventModal(true);
+                    }}
                 >
                     Escolher Evento
                 </button>
                 <button
                     className="btn-sm btn-outline-dark float-right"
-                    data-toggle="modal"
-                    data-target="#createEventModal"
+                    onClick={() => {
+                        setShowCreateEventModal(true);
+                    }}
                 >
                     Criar Evento
                 </button>
             </div>
             <CreateEventModal
                 id={"createEventModal"}
-                handleCreate={selectEvent}
+                handleCreate={(event) => selectEvent(event)}
+                show={showCreateEventModal}
+                handleClose={() => setShowCreateEventModal(false)}
             />
             <SelectEventModal
                 id={"selectEventModal"}
-                handleSelect={selectEvent}
+                handleSelect={(event) => {
+                    selectEvent(event);
+                }}
+                show={showSelectEventModal}
+                handleClose={() => setShowSelectEventModal(false)}
             />
         </div>
     );
