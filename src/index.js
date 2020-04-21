@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {
-    configure
-} from "react-hotkeys";
+// import {
+//     configure
+// } from "react-hotkeys";
 import * as serviceWorker from './serviceWorker';
 
-// react hotkeys initialisation: allows event listening from inputs
-configure({
-    ignoreTags: []
-})
+// // react hotkeys initialisation: allows event listening from inputs
+// configure({
+//     ignoreTags: []
+// })
 console.log('React Keys configured. Keyboards from any component, including inputs and text areas, will be listened.')
 
 ReactDOM.render( < App / > , document.getElementById('root'));

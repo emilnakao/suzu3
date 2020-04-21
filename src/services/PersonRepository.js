@@ -57,7 +57,7 @@ export class PersonRepository {
 
     findYokoshiByName = async (searchToken) => {
 
-        let normalizedSearchToken = normalizeName(searchToken)
+        let normalizedSearchToken = normalizeName(searchToken).toLowerCase()
         return this.db.allDocs({
             include_docs: true,
             startkey: normalizedSearchToken,
@@ -94,7 +94,7 @@ export class PersonRepository {
             creation_date_time: new Date()
         };
 
-        newPerson._id = IdGenerator.calculateId(newPerson);
+        newPerson._id = IdGenerator.generatePersonId(newPerson);
 
         // saving
         await this.db.put(newPerson)

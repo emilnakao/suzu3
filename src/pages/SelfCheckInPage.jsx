@@ -37,7 +37,7 @@ function SelfCheckInPage({
     /**
      * For usage with keyboard arrows up/down
      */
-    const [focusIndex, updateFocusIndex] = useState(0);
+    const [focusIndex, setFocusIndex] = useState(0);
 
     /**
      * List of name suggestions according to what the user types.
@@ -64,45 +64,47 @@ function SelfCheckInPage({
         CONFIRM: "enter",
     };
 
-    const moveRowFocusDown = useCallback(
-        (event) => {
-            let newFocusIndex = focusIndex + 1;
+    const moveRowFocusDown = function () {
+        let newFocusIndex = focusIndex + 1;
+        let maxFocusIndex = personList.length;
 
-            console.log(`KeyDown: focusIndex ${newFocusIndex}`);
-            updateFocusIndex(newFocusIndex);
-        },
-        [focusIndex, updateFocusIndex]
-    );
+        if (newFocusIndex >= maxFocusIndex) {
+            newFocusIndex = maxFocusIndex - 1;
+        }
 
-    const moveRowFocusUp = useCallback(
-        (event) => {
-            let newFocusIndex = focusIndex - 1 < 0 ? 0 : focusIndex - 1;
-            console.log(`KeyUp: focusIndex ${newFocusIndex}`);
-            updateFocusIndex(newFocusIndex);
-        },
-        [focusIndex, updateFocusIndex]
-    );
+        console.log(`KeyDown: focusIndex ${newFocusIndex}`);
+        setFocusIndex(newFocusIndex);
+    };
+
+    const moveRowFocusUp = function () {
+        let newFocusIndex = focusIndex - 1 < 0 ? 0 : focusIndex - 1;
+        console.log(`KeyUp: focusIndex ${newFocusIndex}`);
+        setFocusIndex(newFocusIndex);
+    };
 
     /**
      * Handler for Enter press. The action triggered depends on the current page state.
      *
      */
-    const confirmAction = useCallback(
-        (event) => {
-            if (!currentEvent) {
-                return;
-            }
+    const confirmAction = function () {
+        if (!currentEvent) {
+            return;
+        }
 
-            // No person found. Should register a new one.
-            if (!personList || personList.length === 0) {
-                setShowCreatePersonModal(true);
-            }
-            // The person was here before. Just confirms/cancel his presence.
-            else {
-            }
-        },
-        [personList, currentEvent, setShowCreatePersonModal]
-    );
+        // No person found. Should register a new one.
+        if (!personList || personList.length === 0) {
+            setShowCreatePersonModal(true);
+        }
+        // The person was here before. Just confirms/cancel his presence.
+        else {
+            let focusedPerson = personList[focusIndex];
+            dispatchPresenceAction({
+                type: "add",
+                person: focusedPerson,
+                isFirstTime: false,
+            });
+        }
+    };
 
     /**
      * Maps keys to handler functions. Required parameter for the react-hotkeys component.
