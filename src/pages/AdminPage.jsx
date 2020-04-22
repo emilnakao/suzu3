@@ -15,6 +15,10 @@ function AdminPage(props) {
         CSVImporter.importEventType(filePath);
     };
 
+    const loadHanCSV = (filePath) => {
+        CSVImporter.importHan(filePath);
+    };
+
     return (
         <div role="main" className="w-100 vh-100 jumbotron">
             <div className="col-md-12">
@@ -105,7 +109,7 @@ function AdminPage(props) {
                             </tr>
                         </tbody>
                     </table>
-                    <FileUpload onFileUpload={loadEventTypeCSV} />
+                    <FileUpload onFileUpload={loadHanCSV} />
                 </section>
             </div>
         </div>

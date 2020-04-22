@@ -4,13 +4,13 @@ import {
     faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
-import Async from "react-select/async";
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import CreatePersonModal from "../components/CreatePersonModal";
 import { useAsync } from "../hooks/useAsync";
 import useDebounce from "../hooks/useDebounce";
 import { useInput } from "../hooks/useInput";
-import { HanRepository } from "../services/HanRepository";
+import HanRepository from "../services/HanRepository";
 import NotificationService from "../services/NotificationService";
 import PersonRepository from "../services/PersonRepository";
 
@@ -31,6 +31,14 @@ function PersonPage() {
     const debouncedSearchTerm = useDebounce(personSearchToken, 500);
 
     const [editIndex, setEditIndex] = useState(undefined);
+
+    const [hanList, setHanList] = useState([]);
+
+    useEffect(() => {
+        HanRepository.findAll().then((response) => {
+            setHanList(response.docs);
+        });
+    }, []);
 
     /**
      * List of name suggestions according to what the user types.
@@ -127,6 +135,12 @@ function PersonPage() {
                                                             type="text"
                                                             className="form-control form-control-sm"
                                                             value={person.name}
+                                                            onChange={(
+                                                                event
+                                                            ) => {
+                                                                person.name =
+                                                                    event.target.value;
+                                                            }}
                                                         />
                                                     </td>
                                                     <td>
@@ -134,10 +148,18 @@ function PersonPage() {
                                                     </td>
                                                     <td>{person.isMtai}</td>
                                                     <td>
-                                                        <Async
-                                                            loadOptions={
-                                                                HanRepository.findAll
-                                                            }
+                                                        <Select
+                                                            value={person.han}
+                                                            onChange={(
+                                                                newValue
+                                                            ) => {
+                                                                person.han = newValue;
+                                                            }}
+                                                            options={hanList}
+                                                            placeholder={"Han"}
+                                                            getOptionLabel={(
+                                                                option
+                                                            ) => option.name}
                                                         />{" "}
                                                     </td>
                                                     <td>
