@@ -40,7 +40,7 @@ export class PersonRepository {
      * Procura por yokoshis cujo nome satisfaça searchToken, incluindo no resultado se o yokoshi está presente ou não no evento corrente.
      * @param searchTerm
      */
-    findPerson = async (searchToken, currentEvent) => {
+    findPerson = async (searchToken) => {
         // busca vazia: retorna lista vazia ou abaixo de 3 caracteres
         if (!searchToken || searchToken.length < 3) {
             return [Promise.resolve(Requester.emptyGetResponse())]
@@ -75,6 +75,16 @@ export class PersonRepository {
         });
     }
 
+    countPerson = async () => {
+        let result = await this.db.find({
+            selector: {
+                type: PersonRepository.getDocType()
+            },
+        });
+
+        return result.docs.length
+    }
+
     /**
      * Saves a new person in the database.
      * <p>
@@ -89,9 +99,10 @@ export class PersonRepository {
         let newPerson = {
             name: name,
             type: 'person',
-            is_mtai: isMtai,
-            is_mikumite: !isKumite,
-            creation_date_time: new Date()
+            isMtai: isMtai,
+            isMiKumite: !isKumite,
+            creationDateTime: new Date(),
+            updateDateTime: new Date()
         };
 
         newPerson._id = IdGenerator.generatePersonId(newPerson);

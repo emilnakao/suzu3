@@ -11,6 +11,7 @@ import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
 import SelfCheckInPage from "./pages/SelfCheckInPage";
 import PresenceRepository from "./services/PresenceRepository";
+import PersonPage from "./pages/PersonPage";
 
 const { useReducer, useState } = React;
 
@@ -111,11 +112,6 @@ function App() {
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/admin">
-                                    Admin
-                                </a>
-                            </li>
-                            <li className="nav-item">
                                 <a className="nav-link" href="/selfCheckIn">
                                     <FontAwesomeIcon icon={faCheck} />
                                     Marcar Presenças
@@ -123,13 +119,29 @@ function App() {
                             </li>
                             {/*<liclassName="nav-item"><aclassName="nav-link"href="/okiyome"><FontAwesomeIconicon={faCheck}/>Okiyome</a></li>*/}
 
-                            {/*<liclassName="nav-itemdropdown">*/}
-                            {/*<aclassName="nav-linkdropdown-toggle"href="/"id="operationDropdown"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">Operações</a>*/}
-                            {/*<divclassName="dropdown-menu"aria-labelledby="operationDropdown">*/}
-                            {/*<aclassName="dropdown-item"href="/">AtualizaçãodeCadastro</a>*/}
-                            {/*<aclassName="dropdown-item"href="/">AtualizaçãodeNúcleo</a>*/}
-                            {/*</div>*/}
-                            {/*</li>*/}
+                            <li className="nav-item dropdown">
+                                <a
+                                    className="nav-link dropdown-toggle"
+                                    href="/"
+                                    id="operationDropdown"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                >
+                                    Admin
+                                </a>
+                                <div
+                                    className="dropdown-menu"
+                                    aria-labelledby="operationDropdown"
+                                >
+                                    <a className="dropdown-item" href="/admin">
+                                        Importações Excel
+                                    </a>
+                                    <a className="dropdown-item" href="/person">
+                                        Pessoas
+                                    </a>
+                                </div>
+                            </li>
                             {/*<liclassName="nav-itemdropdown">*/}
                             {/*<aclassName="nav-linkdropdown-toggle"href="/"id="operationDropdown"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">Relatórios</a>*/}
                             {/*<divclassName="dropdown-menu"aria-labelledby="operationDropdown">*/}
@@ -163,6 +175,7 @@ function App() {
                     />
                     {/* <Route exactpath="/okiyome" component={Okiyome} /> */}
                     <Route exact path="/admin" component={AdminPage} />
+                    <Route exact path="/person" component={PersonPage} />
                 </div>
                 <ToastContainer />
             </div>

@@ -10,11 +10,11 @@ import {
 class NotificationService {
 
     error(title, message) {
-
+        toast.error(title, message)
     }
 
     success(title, message) {
-
+        toast.success(title, message)
     }
 }
 
