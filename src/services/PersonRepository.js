@@ -85,6 +85,11 @@ export class PersonRepository {
         return result.docs.length
     }
 
+    async update(person) {
+        person.updateDateTime = new Date()
+        this.db.put(person)
+    }
+
     /**
      * Saves a new person in the database.
      * <p>

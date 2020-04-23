@@ -67,13 +67,13 @@ function PersonPage() {
                             <input
                                 id={"selfCheckinNameSearchInput"}
                                 type="text"
-                                className="form-control form-control-lg mb-2"
+                                className="form-control w-50 mb-2"
                                 placeholder="Digite seu nome aqui"
                                 autoFocus={true}
                                 {...bindPersonSearchToken}
                             />
                             <button
-                                className="form-control form-control-lg btn btn-primary ml-2"
+                                className=" btn btn-primary ml-2 mb-2"
                                 type="button"
                                 onClick={() => {
                                     setShowCreatePersonModal(true);
@@ -103,17 +103,37 @@ function PersonPage() {
                                                 <tr>
                                                     <td>{person.name}</td>
                                                     <td>
-                                                        {!person.isMiKumite}
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-control"
+                                                            checked={
+                                                                !person.isMiKumite
+                                                            }
+                                                            disabled={true}
+                                                        />
                                                     </td>
-                                                    <td>{person.isMtai}</td>
-                                                    <td>{person.han}</td>
                                                     <td>
-                                                        {person.updateDateTime}
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-control"
+                                                            checked={
+                                                                person.isMtai
+                                                            }
+                                                            disabled={true}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        {person.han
+                                                            ? person.han.name
+                                                            : "Não Definido"}
+                                                    </td>
+                                                    <td>
+                                                        {`${person.updateDateTime}`}
                                                     </td>
                                                     <td>
                                                         <button
                                                             type="button"
-                                                            className="form-control btn btn-sm btn-secondary"
+                                                            className="btn btn-sm btn-secondary"
                                                             onClick={() => {
                                                                 setEditIndex(
                                                                     index
@@ -144,12 +164,34 @@ function PersonPage() {
                                                         />
                                                     </td>
                                                     <td>
-                                                        {!person.isMiKumite}
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-control"
+                                                            defaultChecked={
+                                                                !person.isMiKumite
+                                                            }
+                                                            onChange={() => {
+                                                                person.isMiKumite = !person.isMiKumite;
+                                                            }}
+                                                        />
                                                     </td>
-                                                    <td>{person.isMtai}</td>
+                                                    <td>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-control"
+                                                            defaultChecked={
+                                                                person.isMtai
+                                                            }
+                                                            onChange={() => {
+                                                                person.isMtai = !person.isMtai;
+                                                            }}
+                                                        />
+                                                    </td>
                                                     <td>
                                                         <Select
-                                                            value={person.han}
+                                                            defaultValue={
+                                                                person.han
+                                                            }
                                                             onChange={(
                                                                 newValue
                                                             ) => {
@@ -157,21 +199,37 @@ function PersonPage() {
                                                             }}
                                                             options={hanList}
                                                             placeholder={"Han"}
+                                                            isClearable={true}
+                                                            isOptionSelected={
+                                                                false
+                                                            }
                                                             getOptionLabel={(
                                                                 option
                                                             ) => option.name}
                                                         />{" "}
                                                     </td>
                                                     <td>
-                                                        {person.updateDateTime}
+                                                        {`${person.updateDateTime}`}
                                                     </td>
                                                     <td>
                                                         <button
                                                             type="button"
                                                             className="form-control btn btn-sm btn-primary"
                                                             onClick={() => {
-                                                                setEditIndex(
-                                                                    index
+                                                                setLoading(
+                                                                    true
+                                                                );
+                                                                PersonRepository.update(
+                                                                    person
+                                                                ).finally(
+                                                                    () => {
+                                                                        setLoading(
+                                                                            false
+                                                                        );
+                                                                        setEditIndex(
+                                                                            undefined
+                                                                        );
+                                                                    }
                                                                 );
                                                             }}
                                                         >
