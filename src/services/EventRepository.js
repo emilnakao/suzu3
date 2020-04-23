@@ -33,9 +33,9 @@ export class EventRepository {
                 date: {
                     '$eq': formattedDate
                 },
-                // "event.id": {
-                //     '$eq': eventTypeId
-                // }
+                "event.id": {
+                    '$eq': eventTypeId
+                }
             },
         });
     }
