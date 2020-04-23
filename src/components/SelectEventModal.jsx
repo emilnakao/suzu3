@@ -65,10 +65,11 @@ export default function SelectEventModal({
                 <div className="row">
                     <div className="col">
                         <Select
-                            value={eventType}
+                            defaultValue={eventType}
                             onChange={handleChangeEventType}
                             options={eventTypeList}
                             placeholder={"Tipo de Evento"}
+                            isClearable={true}
                             getOptionLabel={(option) => option.name}
                         />
                     </div>

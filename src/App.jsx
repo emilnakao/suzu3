@@ -12,6 +12,7 @@ import HomePage from "./pages/HomePage";
 import SelfCheckInPage from "./pages/SelfCheckInPage";
 import PresenceRepository from "./services/PresenceRepository";
 import PersonPage from "./pages/PersonPage";
+import NotificationService from "./services/NotificationService";
 
 const { useReducer, useState } = React;
 
@@ -61,6 +62,7 @@ function App() {
                     isFirstTime: action.isFirstTime,
                     event: currentEvent,
                 });
+
                 return { ...state, lastPresence: newPresence };
             case "remove":
                 let newList = state.list.filter((elem) => {

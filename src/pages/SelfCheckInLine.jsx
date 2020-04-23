@@ -60,13 +60,7 @@ function SelfCheckInLine({
             }
         >
             <h4>{person.name}</h4>
-            <button
-                className="btn btn-outline-secondary btn-sm"
-                onClick={handleStartPersonEdit}
-            >
-                <FontAwesomeIcon icon={faPencilAlt} className="text-warning" />{" "}
-                Corrigir Cadastro
-            </button>
+
             <button
                 className="btn btn-outline-secondary btn-sm"
                 onClick={handleCancelPresence}
