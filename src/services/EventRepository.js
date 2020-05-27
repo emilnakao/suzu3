@@ -23,20 +23,25 @@ export class EventRepository {
      * @returns {Promise.<void>}
      */
     async findEvents(date, eventTypeId) {
-        let formattedDate = formatDate(date);
+        let selector = {
+            type: EventRepository.getDocType()
+        }
 
-        console.log(`Buscando eventos do tipo ${eventTypeId} e data ${formattedDate}`);
+        if (date) {
+            let formattedDate = formatDate(date);
+            selector.date = {
+                '$eq': formattedDate
+            }
+        }
+
+        if (eventTypeId) {
+            selector["eventType.id"] = {
+                '$eq': eventTypeId
+            }
+        }
 
         return this.db.find({
-            selector: {
-                type: EventRepository.getDocType(),
-                date: {
-                    '$eq': formattedDate
-                },
-                // "event.id": {
-                //     '$eq': eventTypeId
-                // }
-            },
+            selector: selector,
         });
     }
 

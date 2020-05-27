@@ -6,7 +6,7 @@ function PresenceListWidget({ presenceList = [] }) {
     const firstTimeLabel = "1a VEZ";
     const mtaiLabel = "MTAI";
 
-    const isTrue = value => {
+    const isTrue = (value) => {
         return (
             value !== undefined &&
             (value === true || value === "true" || value === "t")
@@ -14,42 +14,42 @@ function PresenceListWidget({ presenceList = [] }) {
     };
 
     const countKumite = () => {
-        return presenceList.filter(p => {
+        return presenceList.filter((p) => {
             if (!p.person) {
                 return false;
             }
 
-            return !isTrue(p.person.is_mikumite);
+            return !isTrue(p.person.isMiKumite);
         }).length;
     };
 
     const countMtai = () => {
-        return presenceList.filter(p => {
+        return presenceList.filter((p) => {
             if (!p.person) {
                 return false;
             }
 
-            return isTrue(p.person.is_mtai);
+            return isTrue(p.person.isMtai);
         }).length;
     };
 
     const countMiKumite = () => {
-        return presenceList.filter(p => {
+        return presenceList.filter((p) => {
             if (!p.person) {
                 return false;
             }
 
-            return isTrue(p.person.is_mikumite);
+            return isTrue(p.person.isMiKumite);
         }).length;
     };
 
     const countFirstTime = () => {
-        return presenceList.filter(p => {
+        return presenceList.filter((p) => {
             if (!p.person) {
                 return false;
             }
 
-            return isTrue(p.person.is_mikumite);
+            return isTrue(p.person.isMiKumite);
         }).length;
     };
 
@@ -63,7 +63,7 @@ function PresenceListWidget({ presenceList = [] }) {
                         style={{
                             height: "80px",
                             backgroundColor: "#428bca",
-                            flexBasis: "100%"
+                            flexBasis: "100%",
                         }}
                     >
                         <div className="presence-counter">{countKumite()}</div>
@@ -74,7 +74,7 @@ function PresenceListWidget({ presenceList = [] }) {
                         style={{
                             height: "80px",
                             backgroundColor: "#2b542c",
-                            flexBasis: "100%"
+                            flexBasis: "100%",
                         }}
                     >
                         <div className="presence-counter">{countMtai()}</div>
@@ -85,7 +85,7 @@ function PresenceListWidget({ presenceList = [] }) {
                         style={{
                             height: "80px",
                             backgroundColor: "#5cb85c",
-                            flexBasis: "100%"
+                            flexBasis: "100%",
                         }}
                     >
                         <div className="presence-counter">
@@ -98,7 +98,7 @@ function PresenceListWidget({ presenceList = [] }) {
                         style={{
                             height: "80px",
                             backgroundColor: "#d9534f",
-                            flexBasis: "100%"
+                            flexBasis: "100%",
                         }}
                     >
                         <div className="presence-counter">
@@ -115,7 +115,7 @@ function PresenceListWidget({ presenceList = [] }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {presenceList.map(function(presence, idx) {
+                        {presenceList.map(function (presence, idx) {
                             return (
                                 <tr>
                                     <td>{idx + 1}</td>

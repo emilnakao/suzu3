@@ -57,11 +57,13 @@ export default function CreateEventModal({
             <Modal.Body>
                 <Form.Group controlId="nomeInput">
                     <Select
-                        value={eventType}
+                        defaultValue={eventType}
                         onChange={handleChange}
+                        isClearable={true}
                         options={eventTypeList}
                         placeholder={"Selecione o tipo de evento"}
                         getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option}
                     />
                 </Form.Group>
             </Modal.Body>
