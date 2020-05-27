@@ -10,21 +10,21 @@ export default function CreatePersonModal({
     show,
     nameSuggestion,
     handleClose,
-    handleConfirm
+    handleConfirm,
 }) {
     const [name, setName] = useState(nameSuggestion);
     const [presenceType, setPresenceType] = useState("kumite");
     const [isMtai, setIsMtai] = useState(false);
 
-    const onConfirm = event => {
+    const onConfirm = (event) => {
         toast.info(`Nome: ${name}, ${presenceType}, ${isMtai}`);
         handleConfirm({
             person: {
                 name: name || nameSuggestion,
                 isKumite: presenceType === "kumite",
-                isMtai: isMtai
+                isMtai: isMtai,
             },
-            firstTime: presenceType === "firstTime"
+            isFirstTime: presenceType === "firstTime",
         });
         handleClose();
     };
@@ -42,7 +42,7 @@ export default function CreatePersonModal({
                         type="text"
                         placeholder="Digite o nome"
                         defaultValue={nameSuggestion}
-                        onChange={e => {
+                        onChange={(e) => {
                             setName(e.target.value);
                         }}
                         required
@@ -52,7 +52,7 @@ export default function CreatePersonModal({
                     <Form.Label>Você é</Form.Label>
                     <Form.Control
                         as="select"
-                        onChange={e => {
+                        onChange={(e) => {
                             setPresenceType(e.target.value);
                         }}
                         value={presenceType}
@@ -69,7 +69,7 @@ export default function CreatePersonModal({
                     <Form.Control
                         as="select"
                         value={isMtai}
-                        onChange={e => {
+                        onChange={(e) => {
                             setIsMtai(e.target.value);
                         }}
                     >

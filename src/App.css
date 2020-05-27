@@ -32,11 +32,13 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
+/* CheckIn Page Styles */
 
 div.suzu-checkin-row {
   border-color: #152820;
@@ -44,24 +46,34 @@ div.suzu-checkin-row {
   padding: 10px;
 }
 
-div.suzu-checkin-row:nth-child(even){
+div.suzu-checkin-row:nth-child(even) {
   background-color: #CAE3D9;
 }
 
-div.suzu-checkin-row:nth-child(odd){
+div.suzu-checkin-row:nth-child(odd) {
   background-color: #F2F8F5;
 }
 
-div.suzu-checkin-row.highlight{
+div.suzu-checkin-row.highlight {
   background-color: #ffffff;
   border: 2px dashed #5DA30C;
 }
-div.suzu-checkin-row.highlight .btn-success:after, div.suzu-checkin-row.highlight .btn-danger:after{
-  content:" \23CE"
+
+div.suzu-checkin-row.highlight .btn-success:after,
+div.suzu-checkin-row.highlight .btn-danger:after {
+  content: " \23CE"
 
 }
+
 .suzu-checkin-row h4 {
   color: #34789a;
+}
+
+/* Presence count widget styles */
+
+.presence-counter-box {
+  height: 80px;
+  flex-basis: 100%;
 }
 
 .presence-counter {
@@ -79,3 +91,36 @@ div.suzu-checkin-row.highlight .btn-success:after, div.suzu-checkin-row.highligh
   font-size: smaller;
 }
 
+/* Person classification colors */
+
+.kumite-background-color {
+  background-color: #428bca;
+}
+
+.kumite-color {
+  color: #428bca;
+}
+
+.mikumite-background-color {
+  background-color: #5cb85c;
+}
+
+.mikumite-color {
+  color: #5cb85c;
+}
+
+.mtai-background-color {
+  background-color: #2b542c;
+}
+
+.mtai-color {
+  color: #2b542c;
+}
+
+.first-time-background-color {
+  background-color: #d9534f;
+}
+
+.first-time-color {
+  color: #d9534f;
+}
