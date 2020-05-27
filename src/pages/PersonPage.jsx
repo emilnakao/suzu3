@@ -13,6 +13,7 @@ import { useInput } from "../hooks/useInput";
 import HanRepository from "../services/HanRepository";
 import NotificationService from "../services/NotificationService";
 import PersonRepository from "../services/PersonRepository";
+import moment from "moment";
 
 /**
  * Screen to manage person registries
@@ -128,7 +129,11 @@ function PersonPage() {
                                                             : "Não Definido"}
                                                     </td>
                                                     <td>
-                                                        {`${person.updateDateTime}`}
+                                                        {`${moment(
+                                                            person.updateDateTime
+                                                        ).format(
+                                                            "DD/MM/YYYY HH:mm:ss"
+                                                        )}`}
                                                     </td>
                                                     <td>
                                                         <button
