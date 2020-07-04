@@ -13,6 +13,9 @@ import SelfCheckInPage from "./pages/SelfCheckInPage";
 import PresenceRepository from "./services/PresenceRepository";
 import PersonPage from "./pages/PersonPage";
 import NotificationService from "./services/NotificationService";
+import PresenceReportPage from "./pages/PresenceByPersonReportPage";
+import PresenceByPersonReportPage from "./pages/PresenceByPersonReportPage";
+import PresenceByDayReportPage from "./pages/PresenceByDayReportPage";
 
 const { useReducer, useState } = React;
 
@@ -109,14 +112,14 @@ function App() {
                             <li className="nav-item active">
                                 <a className="nav-link" href="/">
                                     <FontAwesomeIcon icon={faHome} />
-                                    Home
+                                    &nbsp; Home
                                     <span className="sr-only">(current)</span>
                                 </a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="/selfCheckIn">
                                     <FontAwesomeIcon icon={faCheck} />
-                                    Marcar Presenças
+                                    &nbsp; Marcar Presenças
                                 </a>
                             </li>
                             {/*<liclassName="nav-item"><aclassName="nav-link"href="/okiyome"><FontAwesomeIconicon={faCheck}/>Okiyome</a></li>*/}
@@ -140,7 +143,19 @@ function App() {
                                         Importações Excel
                                     </a>
                                     <a className="dropdown-item" href="/person">
-                                        Pessoas
+                                        Cadastro de Pessoas
+                                    </a>
+                                    <a
+                                        className="dropdown-item"
+                                        href="/presenceByPersonReport"
+                                    >
+                                        Relatório de Presenças por Pessoa
+                                    </a>
+                                    <a
+                                        className="dropdown-item"
+                                        href="/presenceByDayReport"
+                                    >
+                                        Relatório de Presenças por Dia
                                     </a>
                                 </div>
                             </li>
@@ -178,6 +193,16 @@ function App() {
                     {/* <Route exactpath="/okiyome" component={Okiyome} /> */}
                     <Route exact path="/admin" component={AdminPage} />
                     <Route exact path="/person" component={PersonPage} />
+                    <Route
+                        exact
+                        path="/presenceByPersonReport"
+                        component={PresenceByPersonReportPage}
+                    />
+                    <Route
+                        exact
+                        path="/presenceByDayReport"
+                        component={PresenceByDayReportPage}
+                    />
                 </div>
                 <ToastContainer />
             </div>

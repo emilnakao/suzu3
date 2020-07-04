@@ -1,5 +1,6 @@
 import PouchDBProvider from "./PouchDBProvider";
 import IdGenerator from "./IdGenerator";
+import moment from "moment";
 
 /**
  */
@@ -23,6 +24,25 @@ export class PresenceRepository {
                 "event._id": event._id
             }
         });
+    }
+
+    async findPresencesByInterval({
+        startDate,
+        endDate
+    }) {
+        let startOfStartDate = moment(startDate).startOf('day').toDate()
+        let endOfEndDate = moment(endDate).endOf('day').toDate()
+
+        return this.db.find({
+            selector: {
+                type: PresenceRepository.getDocType(),
+                "dateTime": {
+                    $gte: startOfStartDate,
+                    $lte: endOfEndDate
+                }
+            }
+
+        })
     }
 
     async savePresence({
