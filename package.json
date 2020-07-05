@@ -4,13 +4,13 @@
   "private": true,
   "author": {
     "name": "Suzu Team",
-    "email": "",
+    "email": "emilnakao@gmail.com",
     "url": ""
   },
   "build": {
-    "appId": "com.my-website.my-app",
+    "appId": "com.suzu3",
     "productName": "SUZU 3",
-    "copyright": "Copyright © 2019 ${author}",
+    "copyright": "Copyright © 2020 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },
@@ -23,6 +23,7 @@
     }
   },
   "main": "public/electron.js",
+  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",

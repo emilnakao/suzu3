@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route, Link } from "react-router-dom";
+import { withRouter } from "react-router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
@@ -110,17 +111,16 @@ function App() {
                     >
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item active">
-                                <a className="nav-link" href="/">
+                                <Link className="nav-link" to="/">
                                     <FontAwesomeIcon icon={faHome} />
                                     &nbsp; Home
-                                    <span className="sr-only">(current)</span>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/selfCheckIn">
+                                <Link className="nav-link" to="/selfCheckIn">
                                     <FontAwesomeIcon icon={faCheck} />
                                     &nbsp; Marcar Presenças
-                                </a>
+                                </Link>
                             </li>
                             {/*<liclassName="nav-item"><aclassName="nav-link"href="/okiyome"><FontAwesomeIconicon={faCheck}/>Okiyome</a></li>*/}
 
@@ -139,24 +139,27 @@ function App() {
                                     className="dropdown-menu"
                                     aria-labelledby="operationDropdown"
                                 >
-                                    <a className="dropdown-item" href="/admin">
+                                    <Link className="dropdown-item" to="/admin">
                                         Importações Excel
-                                    </a>
-                                    <a className="dropdown-item" href="/person">
-                                        Cadastro de Pessoas
-                                    </a>
-                                    <a
+                                    </Link>
+                                    <Link
                                         className="dropdown-item"
-                                        href="/presenceByPersonReport"
+                                        to="/person"
+                                    >
+                                        Cadastro de Pessoas
+                                    </Link>
+                                    <Link
+                                        className="dropdown-item"
+                                        to="/presenceByPersonReport"
                                     >
                                         Relatório de Presenças por Pessoa
-                                    </a>
-                                    <a
+                                    </Link>
+                                    <Link
                                         className="dropdown-item"
-                                        href="/presenceByDayReport"
+                                        to="/presenceByDayReport"
                                     >
                                         Relatório de Presenças por Dia
-                                    </a>
+                                    </Link>
                                 </div>
                             </li>
                             {/*<liclassName="nav-itemdropdown">*/}
@@ -173,7 +176,6 @@ function App() {
                 <div className="flex-fill d-flex">
                     <Route exact path="/" component={HomePage} />
                     <Route
-                        exact
                         path="/selfCheckIn"
                         render={(props) => (
                             <SelfCheckInPage
@@ -191,7 +193,11 @@ function App() {
                         )}
                     />
                     {/* <Route exactpath="/okiyome" component={Okiyome} /> */}
-                    <Route exact path="/admin" component={AdminPage} />
+                    <Route
+                        exact
+                        path="/admin"
+                        component={withRouter(AdminPage)}
+                    />
                     <Route exact path="/person" component={PersonPage} />
                     <Route
                         exact

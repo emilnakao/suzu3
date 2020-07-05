@@ -14,7 +14,7 @@ function SelfCheckInLine({
     dispatchPresenceAction,
 }) {
     const handleConfirmPresence = (e) => {
-        toast.info("Presença confirmada para " + JSON.stringify(person));
+        toast.info("Presença confirmada para " + person.name);
         dispatchPresenceAction({
             type: "add",
             person: person,
@@ -22,16 +22,14 @@ function SelfCheckInLine({
     };
 
     const handleCancelPresence = (e) => {
-        toast.info("Presença cancelada para " + JSON.stringify(person));
+        toast.info("Presença cancelada para " + person.name);
         dispatchPresenceAction({
             type: "remove",
             presence: findPersonPresence(),
         });
     };
 
-    const handleStartPersonEdit = (e) => {
-        toast.info("Iniciando edição para " + JSON.stringify(person));
-    };
+    const handleStartPersonEdit = (e) => {};
 
     const isCancelPresenceDisabled = () => {
         return findPersonPresence() === undefined;

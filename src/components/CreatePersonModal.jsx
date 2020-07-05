@@ -17,7 +17,6 @@ export default function CreatePersonModal({
     const [isMtai, setIsMtai] = useState(false);
 
     const onConfirm = (event) => {
-        toast.info(`Nome: ${name}, ${presenceType}, ${isMtai}`);
         handleConfirm({
             person: {
                 name: name || nameSuggestion,
