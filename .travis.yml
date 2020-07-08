@@ -24,6 +24,6 @@ script:
 deploy:
     provider: script
     skip_cleanup: true
-    script: electron-builder -p always
+    script: npm run electron-pack
     on:
         tags: true
