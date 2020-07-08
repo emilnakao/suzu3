@@ -25,8 +25,6 @@ function SelfCheckInLine({
         });
     };
 
-    const handleStartPersonEdit = (e) => {};
-
     const isCancelPresenceDisabled = () => {
         return findPersonPresence() === undefined;
     };

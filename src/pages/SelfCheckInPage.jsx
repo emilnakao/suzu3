@@ -1,6 +1,6 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { HotKeys } from "react-hotkeys";
 import CreatePersonModal from "../components/CreatePersonModal";
 import PresenceListWidget from "../components/PresenceListWidget";
@@ -46,11 +46,6 @@ function SelfCheckInPage({
         PersonRepository.findPerson,
         debouncedSearchTerm,
     ]);
-
-    /**
-     * Feedback for async operations
-     */
-    const [loading, setLoading] = useState(false);
 
     const [showCreatePersonModal, setShowCreatePersonModal] = useState(false);
 

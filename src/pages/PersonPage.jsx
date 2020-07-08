@@ -84,6 +84,9 @@ function PersonPage() {
                             </button>
                         </div>
 
+                        {/*  TODO: show loading properly */}
+                        {loading && <span className="loading" />}
+
                         <table className="table table-striped">
                             <thead>
                                 <tr>

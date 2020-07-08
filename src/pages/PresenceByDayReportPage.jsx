@@ -15,7 +15,7 @@ function PresenceByDayReportPage(props) {
 
     const [presenceList, setPresenceList] = useState([]);
 
-    const { items, requestSort, sortConfig } = useSortableData(presenceList);
+    const { items, requestSort } = useSortableData(presenceList);
 
     const handleSearch = async () => {
         PresenceRepository.findPresencesByInterval({
