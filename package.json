@@ -20,9 +20,11 @@
     ],
     "directories": {
       "buildResources": "assets"
-    }
+    },
+    "publish": "github"
   },
   "main": "public/electron.js",
+  "repository": "https://github.com/emilnakao/suzu3",
   "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
