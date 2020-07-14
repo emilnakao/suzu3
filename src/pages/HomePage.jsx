@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+const appVersion = window.require("electron").remote.app.getVersion();
+
 class HomePage extends Component {
     render() {
         return (
@@ -8,7 +10,7 @@ class HomePage extends Component {
                     <b>SUZU</b>3<small>alfa</small>
                 </h1>
                 <p className="lead">Aplicação para controle de presenças</p>
-                <p className="lead">Versão 2020-02</p>
+                <p className="lead">Versão {appVersion}</p>
             </div>
         );
     }
