@@ -1,7 +1,6 @@
-import electron, {
-    dialog
-} from 'electron'
-import log from 'log-to-file'
+const electron = require('electron')
+const dialog = electron.dialog
+const log = require('log-to-file')
 
 // Current version of the app
 const APP_VERSION = require('../package.json').version
