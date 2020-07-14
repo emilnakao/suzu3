@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-const appVersion = window.require("electron").remote.app.getVersion();
+const appVersion = require("electron").remote.app.getVersion();
 
 class HomePage extends Component {
     render() {
