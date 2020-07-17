@@ -48,3 +48,17 @@ Para rodar:
 ### Desenvolvendo
 
     npm run electron-dev
+
+### Release
+
+-   Rodar, na branch master:
+
+`npm version prepatch`
+
+(no exemplo usamos prepatch, mas pode ser patch, minor, o que for adequado)
+
+-   Fazer merge na branch prod:
+
+```git checkout prod
+    git merge master
+```
