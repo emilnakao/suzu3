@@ -1,4 +1,4 @@
-const log = require('log-to-file');
+const log = require('electron-log');
 
 const electron = require('electron');
 const app = electron.app;
@@ -9,7 +9,7 @@ const isDev = require('electron-is-dev');
 const updater = require('./updater');
 
 
-log(process.argv, 'suzu3.log')
+log.info(process.argv, 'suzu3.log')
 
 let mainWindow;
 
@@ -30,7 +30,7 @@ function createWindow() {
   } else {
     // Handle squirrel event. Avoid calling for updates when install
     if (require('electron-squirrel-startup')) {
-      log('Squirrel events handle', 'suzu3.log')
+      log.info('Squirrel events handle')
       app.quit()
       // Hack because app.quit() is not immediate
       process.exit(0)
@@ -39,14 +39,14 @@ function createWindow() {
     if (process.platform === 'win32') {
       var cmd = process.argv[1]
       if (cmd === '--squirrel-firstrun') {
-        log('Squirrel first run', 'suzu3.log')
+        log.info('Squirrel first run')
         return
       }
     }
 
     // Check for updates
     mainWindow.webContents.once("did-frame-finish-load", function (event) {
-      log('Ready to look for update', 'suzu3.log')
+      log.info('Ready to look for update')
       updater.init()
     })
   }
@@ -56,7 +56,7 @@ function createWindow() {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  log('Closing app', 'suzu3.log')
+  log.info('Closing app')
   if (process.platform !== 'darwin') {
     app.quit();
   }
