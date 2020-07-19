@@ -9,7 +9,7 @@ const isDev = require('electron-is-dev');
 const updater = require('./updater');
 
 
-log.info(process.argv, 'suzu3.log')
+log.info(process.argv)
 
 let mainWindow;
 

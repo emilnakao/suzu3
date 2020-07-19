@@ -42,10 +42,10 @@ function initDarwinWin32() {
             log.info('Update downloaded')
             dialog.showMessageBox({
                 type: 'question',
-                buttons: ['Update', 'Cancel'],
+                buttons: ['Atualizar', 'Cancelar'],
                 defaultId: 0,
-                message: `Version ${releaseName} is available, do you want to install it now?`,
-                title: 'Update available'
+                message: `Versão ${releaseName} disponível, gostaria de instalar agora?`,
+                title: 'Atualização disponível'
             }, response => {
                 if (response === 0) {
                     electron.autoUpdater.quitAndInstall()
