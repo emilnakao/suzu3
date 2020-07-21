@@ -15,7 +15,13 @@ export default function CreatePersonModal({
     const [presenceType, setPresenceType] = useState("kumite");
     const [isMtai, setIsMtai] = useState(false);
 
-    const onConfirm = (event) => {
+    const resetFields = () => {
+        setName(undefined);
+        setPresenceType("kumite");
+        setIsMtai(false);
+    };
+
+    const onConfirm = () => {
         handleConfirm({
             person: {
                 name: name || nameSuggestion,
@@ -24,6 +30,7 @@ export default function CreatePersonModal({
             },
             isFirstTime: presenceType === "firstTime",
         });
+        resetFields();
         handleClose();
     };
 
@@ -68,11 +75,11 @@ export default function CreatePersonModal({
                         as="select"
                         value={isMtai}
                         onChange={(e) => {
-                            setIsMtai(e.target.value);
+                            setIsMtai(JSON.parse(e.target.value));
                         }}
                     >
-                        <option value="false">Não</option>
-                        <option value="true">Sim</option>
+                        <option value={false}>Não</option>
+                        <option value={true}>Sim</option>
                     </Form.Control>
                 </Form.Group>
             </Modal.Body>
