@@ -1,4 +1,4 @@
-import { EventRepository } from "./EventRepository";
+import EventRepository from "./EventRepository";
 import EventTypeRepository from "./EventTypeRepository";
 import HanRepository from "./HanRepository";
 import { CSVImporter } from "./CSVImporter";

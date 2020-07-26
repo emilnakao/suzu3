@@ -30,7 +30,7 @@ jest.mock("../../services/ApplicationContext", () => {
             }),
         },
         eventRepository: {
-            findOrCreateEventToday: jest.fn(() => {
+            findOrCreateEvent: jest.fn(() => {
                 return Promise.resolve();
             }),
         },
@@ -57,25 +57,23 @@ it("Shows all event types in a select", async () => {
         />
     );
 
-    await waitFor(() =>
-        expect(eventTypeRepository.findAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(eventTypeRepository.findAll).toHaveBeenCalled());
 
     fireEvent.keyDown(screen.queryByLabelText(EVENT_TYPE_SELECT), {
         key: "ArrowDown",
     });
 
-    // TODO: not being able to check rendered options
     expect(screen.queryByText("Cerimônia Mensal")).toBeInTheDocument();
     expect(screen.queryByText("Dia Normal")).toBeInTheDocument();
 });
 
 it("Closes modal when user cancels", () => {
-    render(<CreateEventModal show={true} />);
+    const closeHandler = jest.fn();
+    render(<CreateEventModal show={true} handleClose={closeHandler} />);
     expect(screen.queryByText(MODAL_TITLE)).toBeInTheDocument();
 
     fireEvent.click(screen.getByText("Cancelar"));
-    expect(screen.queryByText(MODAL_TITLE)).not.toBeInTheDocument();
+    expect(closeHandler).toHaveBeenCalled();
 });
 
 it("Calls handleCreate when user confirms and closes modal", async () => {
@@ -102,7 +100,7 @@ it("Calls handleCreate when user confirms and closes modal", async () => {
 
     fireEvent.click(screen.getByText("Salvar"));
     await waitFor(() =>
-        expect(eventRepository.findOrCreateEventToday).toHaveBeenCalledTimes(1)
+        expect(eventRepository.findOrCreateEvent).toHaveBeenCalledTimes(1)
     );
 
     expect(createHandler).toHaveBeenCalledTimes(1);
@@ -129,3 +127,7 @@ it("Shows confirm button disabled when no event type is selected", async () => {
 
 it("Shows confirm button disabled when no date is selected", () => {});
 it("Calls handleCreate with correct data when called more than one time in a row", () => {});
+
+afterEach(() => {
+    jest.clearAllMocks();
+});

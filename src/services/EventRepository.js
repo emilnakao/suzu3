@@ -1,7 +1,7 @@
 import { formatDate } from "../utils/StringUtils";
 import { logNewData } from "../utils/Logger";
 
-export class EventRepository {
+export default class EventRepository {
     db;
     idGenerator;
 
