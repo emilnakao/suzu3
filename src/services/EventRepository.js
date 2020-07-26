@@ -1,4 +1,5 @@
 import { formatDate } from "../utils/StringUtils";
+import { logNewData } from "../utils/Logger";
 
 export class EventRepository {
     db;
@@ -9,19 +10,13 @@ export class EventRepository {
         this.idGenerator = idGenerator;
     }
 
-    static getDocType() {
+    getDocType() {
         return "event";
     }
 
-    /**
-     * Eventos por dia e tipo
-     * @param day
-     * @param type
-     * @returns {Promise.<void>}
-     */
     async findEvents(date, eventTypeId) {
         let selector = {
-            type: EventRepository.getDocType(),
+            type: this.getDocType(),
         };
 
         if (date) {
@@ -42,38 +37,35 @@ export class EventRepository {
         });
     }
 
-    async findOrCreateEventToday(eventType) {
-        console.log(`Chamou EventService.findOrCreateEventToday`);
-        let existingEvent = await this.findEvents(new Date(), eventType.id);
+    /**
+     *
+     * @param {date} date
+     * @param {object} eventType
+     */
+    async findOrCreateEvent(date, eventType) {
+        let existingEvent = await this.findEvents(date, eventType.id);
 
         if (
             existingEvent &&
             existingEvent.docs &&
             existingEvent.docs.length > 0
         ) {
-            console.log(
-                `findOrCreateEventToday retornando evento existente. ${JSON.stringify(
-                    existingEvent
-                )}`
-            );
             return Promise.resolve(existingEvent.docs[0]);
         }
 
         // if an event of same type still does not exist, create:
         let newEvent = {
-            type: EventRepository.getDocType(),
+            type: this.getDocType(),
             eventType: eventType,
-            date: formatDate(new Date()),
+            date: formatDate(date),
         };
 
         newEvent._id = this.idGenerator.generateEventId(newEvent);
 
         this.db.put(newEvent);
-        console.log(
-            `findOrCreateEventToday retornando evento recém criado: ${JSON.stringify(
-                newEvent
-            )}`
-        );
+
+        logNewData(newEvent);
+
         return Promise.resolve({
             ...newEvent,
             id: newEvent._id,

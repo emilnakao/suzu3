@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
-import Select from "react-select";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
-import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import {
-    eventRepository,
-    eventTypeRepository,
-} from "../services/ApplicationContext";
+import { eventRepository } from "../services/ApplicationContext";
+import DatePicker from "./DatePicker";
+import EventTypeSelect from "./EventTypeSelect";
 
 export default function SelectEventModal({
     id,
@@ -20,8 +17,6 @@ export default function SelectEventModal({
      * Event Type for event search
      */
     const [eventType, setEventType] = useState(undefined);
-
-    const [eventTypeList, setEventTypeList] = useState([]);
 
     /**
      * Date for event search
@@ -42,20 +37,12 @@ export default function SelectEventModal({
         let eventTypeId = eventType ? eventType.id : undefined;
         let events = await eventRepository.findEvents(date, eventTypeId);
         setEventList(events.docs);
-        console.log(`Eventos encontrados: ${JSON.stringify(events)}`);
     };
 
     const handleSelectEvent = (event) => {
-        console.log(`Evento selecionado: ${JSON.stringify(event)}`);
         handleSelect(event);
         handleClose();
     };
-
-    useEffect(() => {
-        eventTypeRepository.findAll().then((response) => {
-            setEventTypeList(response.docs);
-        });
-    }, []);
 
     return (
         <Modal show={show} id={id} onHide={handleClose}>
@@ -66,28 +53,13 @@ export default function SelectEventModal({
             <Modal.Body>
                 <div className="row">
                     <div className="col">
-                        <Select
+                        <EventTypeSelect
                             defaultValue={eventType}
                             onChange={handleChangeEventType}
-                            options={eventTypeList}
-                            placeholder={"Tipo de Evento"}
-                            isClearable={true}
-                            getOptionLabel={(option) => option.name}
                         />
                     </div>
                     <div className="col">
-                        <DayPickerInput
-                            value={date}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={date} changeHandler={setDate} />
                     </div>
                 </div>
             </Modal.Body>

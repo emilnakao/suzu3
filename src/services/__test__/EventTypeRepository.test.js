@@ -1,4 +1,4 @@
-import { EventTypeRepository } from "../EventTypeRepository";
+import EventTypeRepository from "../EventTypeRepository";
 import PouchDBProvider from "../PouchDBProvider";
 import IdGenerator from "../../utils/IdGenerator";
 
@@ -17,12 +17,12 @@ describe("EventTypeRepository", () => {
         // given: 2 saved event types
         let eventType1 = {
             name: "Normal Day",
-            type: EventTypeRepository.getDocType(),
+            type: repository.getDocType(),
         };
 
         let eventType2 = {
             name: "Ceremony",
-            type: EventTypeRepository.getDocType(),
+            type: repository.getDocType(),
         };
 
         await db.put({

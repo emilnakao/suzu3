@@ -8,5 +8,9 @@ export function normalizeName(name) {
 }
 
 export function formatDate(date) {
+    if (!date) {
+        return undefined;
+    }
+
     return moment(date).format("YYYY-MM-DD");
 }

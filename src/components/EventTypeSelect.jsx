@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { eventTypeRepository } from "../services/ApplicationContext";
 
-export default function EventTypeSelect({ value, defaultValue, handleChange }) {
+export default function EventTypeSelect({ value, defaultValue, onChange }) {
     const [eventTypeList, setEventTypeList] = useState([]);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function EventTypeSelect({ value, defaultValue, handleChange }) {
             aria-label="Selecione o Tipo de Evento"
             defaultValue={defaultValue}
             value={value}
-            onChange={handleChange}
+            onChange={onChange}
             isClearable={true}
             options={eventTypeList}
             placeholder={"Selecione o tipo de evento"}

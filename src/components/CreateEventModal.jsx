@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, Col } from "react-bootstrap";
 
 import { eventRepository } from "../services/ApplicationContext";
 import EventTypeSelect from "./EventTypeSelect";
 import NotificationService from "../services/NotificationService";
+import DatePicker from "./DatePicker";
+import { formatDate } from "../utils/StringUtils";
 
 export default function CreateEventModal({
     id,
@@ -12,17 +14,20 @@ export default function CreateEventModal({
     handleClose,
 }) {
     const [eventType, setEventType] = useState(undefined);
+    const [date, setDate] = useState(new Date());
 
     const handleChange = (selectedOption) => {
         setEventType(selectedOption);
     };
 
     const handleConfirmCreate = async (e) => {
-        let event = await eventRepository.findOrCreateEventToday(eventType);
+        let event = await eventRepository.findOrCreateEvent(date, eventType);
         handleCreate(event);
         handleClose();
         NotificationService.success(
-            `${eventType.name} para o dia de hoje criado com sucesso!`
+            `${eventType.name} para o dia ${formatDate(
+                date
+            )} criado com sucesso!`
         );
     };
 
@@ -33,11 +38,17 @@ export default function CreateEventModal({
             </Modal.Header>
 
             <Modal.Body>
-                <Form.Group controlId="nomeInput"></Form.Group>
-                <EventTypeSelect
-                    handleChange={handleChange}
-                    value={eventType}
-                />
+                <Form.Row>
+                    <Col sm={8}>
+                        <EventTypeSelect
+                            onChange={handleChange}
+                            value={eventType}
+                        />
+                    </Col>
+                    <Col sm={4}>
+                        <DatePicker value={date} onChange={setDate} />
+                    </Col>
+                </Form.Row>
             </Modal.Body>
 
             <Modal.Footer>
@@ -53,7 +64,7 @@ export default function CreateEventModal({
                     type="button"
                     className="btn btn-primary"
                     onClick={handleConfirmCreate}
-                    disabled={!eventType}
+                    disabled={!eventType || !date}
                 >
                     Salvar
                 </button>

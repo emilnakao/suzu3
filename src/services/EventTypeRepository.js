@@ -7,14 +7,14 @@ export default class EventTypeRepository {
         this.idGenerator = idGenerator;
     }
 
-    static getDocType() {
+    getDocType() {
         return "eventType";
     }
 
     async findAll() {
         return this.db.find({
             selector: {
-                type: EventTypeRepository.getDocType(),
+                type: this.getDocType(),
             },
         });
     }
