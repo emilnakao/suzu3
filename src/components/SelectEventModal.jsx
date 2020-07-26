@@ -3,10 +3,12 @@ import Select from "react-select";
 import { Modal } from "react-bootstrap";
 import DayPickerInput from "react-day-picker/DayPickerInput";
 import "react-day-picker/lib/style.css";
-import eventTypeService from "../services/EventTypeRepository";
-import eventService from "../services/EventRepository";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+    eventRepository,
+    eventTypeRepository,
+} from "../services/ApplicationContext";
 
 export default function SelectEventModal({
     id,
@@ -38,7 +40,7 @@ export default function SelectEventModal({
 
     const handleSearch = async () => {
         let eventTypeId = eventType ? eventType.id : undefined;
-        let events = await eventService.findEvents(date, eventTypeId);
+        let events = await eventRepository.findEvents(date, eventTypeId);
         setEventList(events.docs);
         console.log(`Eventos encontrados: ${JSON.stringify(events)}`);
     };
@@ -50,7 +52,7 @@ export default function SelectEventModal({
     };
 
     useEffect(() => {
-        eventTypeService.findAll().then((response) => {
+        eventTypeRepository.findAll().then((response) => {
             setEventTypeList(response.docs);
         });
     }, []);

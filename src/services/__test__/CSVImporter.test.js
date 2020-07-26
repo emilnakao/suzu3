@@ -1,21 +1,18 @@
-import {
-    CSVImporter
-} from './../CSVImporter'
-import path from 'path';
-import PouchDBProvider from '../PouchDBProvider';
-import IdGenerator from '../IdGenerator';
+import { CSVImporter } from "./../CSVImporter";
+import path from "path";
+import PouchDBProvider from "../PouchDBProvider";
+import IdGenerator from "../../utils/IdGenerator";
 
-describe('CSVImporter', () => {
-
-    let db, csvImporter
+describe("CSVImporter", () => {
+    let db, csvImporter;
 
     beforeEach(async () => {
-        db = PouchDBProvider.create('testCSVImporter')
-        csvImporter = new CSVImporter('testCSVImporter')
-    })
+        db = PouchDBProvider.create("testCSVImporter");
+        csvImporter = new CSVImporter({ db: db, idGenerator: IdGenerator });
+    });
 
-    it('Imports person data', async () => {
-        let fileName = path.join(__dirname, 'yokoshi.csv');
+    it("Imports person data", async () => {
+        let fileName = path.join(__dirname, "yokoshi.csv");
 
         // csv import takes longer than the default 5s timeout
         jest.setTimeout(30000);
@@ -23,13 +20,15 @@ describe('CSVImporter', () => {
         await csvImporter.importPerson(fileName);
 
         // check if first data line of yokoshi.csv is imported
-        let savedPersonSample = await db.get(IdGenerator.generatePersonId({
-            name: 'Emil Yoshigae NAKAO'
-        }));
-        expect(savedPersonSample.name).toEqual('Emil Yoshigae NAKAO');
+        let savedPersonSample = await db.get(
+            IdGenerator.generatePersonId({
+                name: "Emil Yoshigae NAKAO",
+            })
+        );
+        expect(savedPersonSample.name).toEqual("Emil Yoshigae NAKAO");
     });
 
     afterEach(async () => {
-        await db.destroy()
-    })
-})
+        await db.destroy();
+    });
+});

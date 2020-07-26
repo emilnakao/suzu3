@@ -1,52 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Form } from "react-bootstrap";
-import Select from "react-select";
-import EventTypeRepository from "../services/EventTypeRepository";
-import EventRepository from "../services/EventRepository";
-import { toast } from "react-toastify";
 
-/**
- *
- * @param {*} param0
- */
+import { eventRepository } from "../services/ApplicationContext";
+import EventTypeSelect from "./EventTypeSelect";
+import NotificationService from "../services/NotificationService";
+
 export default function CreateEventModal({
     id,
     show,
     handleCreate,
     handleClose,
 }) {
-    /**
-     * Event Type for event search
-     */
     const [eventType, setEventType] = useState(undefined);
-
-    const [eventTypeList, setEventTypeList] = useState([]);
 
     const handleChange = (selectedOption) => {
         setEventType(selectedOption);
-        console.log(`Option selected:`, selectedOption);
     };
 
     const handleConfirmCreate = async (e) => {
-        let event = await EventRepository.findOrCreateEventToday(eventType);
-        console.log(`CreateEventModal: salvou ${event}`);
+        let event = await eventRepository.findOrCreateEventToday(eventType);
         handleCreate(event);
         handleClose();
-        toast.success(
+        NotificationService.success(
             `${eventType.name} para o dia de hoje criado com sucesso!`
         );
     };
-
-    /**
-     * Loads the event type list when the screen loads.
-     *
-     * This method is executed once.
-     */
-    useEffect(() => {
-        EventTypeRepository.findAll().then((result) => {
-            setEventTypeList(result.docs);
-        });
-    }, []);
 
     return (
         <Modal show={show} id={id} onHide={handleClose}>
@@ -55,17 +33,11 @@ export default function CreateEventModal({
             </Modal.Header>
 
             <Modal.Body>
-                <Form.Group controlId="nomeInput">
-                    <Select
-                        defaultValue={eventType}
-                        onChange={handleChange}
-                        isClearable={true}
-                        options={eventTypeList}
-                        placeholder={"Selecione o tipo de evento"}
-                        getOptionLabel={(option) => option.name}
-                        getOptionValue={(option) => option}
-                    />
-                </Form.Group>
+                <Form.Group controlId="nomeInput"></Form.Group>
+                <EventTypeSelect
+                    handleChange={handleChange}
+                    value={eventType}
+                />
             </Modal.Body>
 
             <Modal.Footer>

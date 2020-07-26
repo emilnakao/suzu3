@@ -1,22 +1,21 @@
 import React from "react";
 import FileUpload from "../components/FileUpload";
-import CSVImporter from "../services/CSVImporter";
 
 /**
  *
  * @param {*} props
  */
-function AdminPage(props) {
+function AdminPage({ csvImporter }) {
     const loadPersonCSV = (filePath) => {
-        CSVImporter.importPerson(filePath);
+        csvImporter.importPerson(filePath);
     };
 
     const loadEventTypeCSV = (filePath) => {
-        CSVImporter.importEventType(filePath);
+        csvImporter.importEventType(filePath);
     };
 
     const loadHanCSV = (filePath) => {
-        CSVImporter.importHan(filePath);
+        csvImporter.importHan(filePath);
     };
 
     return (

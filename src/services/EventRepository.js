@@ -1,19 +1,16 @@
-import IdGenerator from './IdGenerator';
-import PouchDBProvider from "./PouchDBProvider";
-import {
-    formatDate
-} from './StringUtils';
+import { formatDate } from "../utils/StringUtils";
 
 export class EventRepository {
+    db;
+    idGenerator;
 
-    db
-
-    constructor() {
-        this.db = PouchDBProvider.create(PouchDBProvider.getDefaultDatabaseName())
+    constructor({ db, idGenerator }) {
+        this.db = db;
+        this.idGenerator = idGenerator;
     }
 
     static getDocType() {
-        return 'event'
+        return "event";
     }
 
     /**
@@ -24,20 +21,20 @@ export class EventRepository {
      */
     async findEvents(date, eventTypeId) {
         let selector = {
-            type: EventRepository.getDocType()
-        }
+            type: EventRepository.getDocType(),
+        };
 
         if (date) {
             let formattedDate = formatDate(date);
             selector.date = {
-                '$eq': formattedDate
-            }
+                $eq: formattedDate,
+            };
         }
 
         if (eventTypeId) {
             selector["eventType.id"] = {
-                '$eq': eventTypeId
-            }
+                $eq: eventTypeId,
+            };
         }
 
         return this.db.find({
@@ -49,8 +46,16 @@ export class EventRepository {
         console.log(`Chamou EventService.findOrCreateEventToday`);
         let existingEvent = await this.findEvents(new Date(), eventType.id);
 
-        if (existingEvent && existingEvent.docs && existingEvent.docs.length > 0) {
-            console.log(`findOrCreateEventToday retornando evento existente. ${JSON.stringify(existingEvent)}`);
+        if (
+            existingEvent &&
+            existingEvent.docs &&
+            existingEvent.docs.length > 0
+        ) {
+            console.log(
+                `findOrCreateEventToday retornando evento existente. ${JSON.stringify(
+                    existingEvent
+                )}`
+            );
             return Promise.resolve(existingEvent.docs[0]);
         }
 
@@ -58,20 +63,20 @@ export class EventRepository {
         let newEvent = {
             type: EventRepository.getDocType(),
             eventType: eventType,
-            date: formatDate(new Date())
+            date: formatDate(new Date()),
         };
 
-        newEvent._id = IdGenerator.generateEventId(newEvent)
+        newEvent._id = this.idGenerator.generateEventId(newEvent);
 
         this.db.put(newEvent);
-        console.log(`findOrCreateEventToday retornando evento recém criado: ${JSON.stringify(newEvent)}`);
+        console.log(
+            `findOrCreateEventToday retornando evento recém criado: ${JSON.stringify(
+                newEvent
+            )}`
+        );
         return Promise.resolve({
             ...newEvent,
-            id: newEvent._id
+            id: newEvent._id,
         });
     }
-
-
 }
-
-export default new EventRepository();

@@ -10,10 +10,12 @@ import CreatePersonModal from "../components/CreatePersonModal";
 import { useAsync } from "../hooks/useAsync";
 import useDebounce from "../hooks/useDebounce";
 import { useInput } from "../hooks/useInput";
-import HanRepository from "../services/HanRepository";
 import NotificationService from "../services/NotificationService";
-import PersonRepository from "../services/PersonRepository";
 import moment from "moment";
+import {
+    hanRepository,
+    personRepository,
+} from "../services/ApplicationContext";
 
 /**
  * Screen to manage person registries
@@ -36,7 +38,7 @@ function PersonPage() {
     const [hanList, setHanList] = useState([]);
 
     useEffect(() => {
-        HanRepository.findAll().then((response) => {
+        hanRepository.findAll().then((response) => {
             setHanList(response.docs);
         });
     }, []);
@@ -45,7 +47,7 @@ function PersonPage() {
      * List of name suggestions according to what the user types.
      */
     const personList = useAsync([
-        PersonRepository.findPerson,
+        personRepository.findPerson,
         debouncedSearchTerm,
     ]);
 
@@ -227,18 +229,20 @@ function PersonPage() {
                                                                 setLoading(
                                                                     true
                                                                 );
-                                                                PersonRepository.update(
-                                                                    person
-                                                                ).finally(
-                                                                    () => {
-                                                                        setLoading(
-                                                                            false
-                                                                        );
-                                                                        setEditIndex(
-                                                                            undefined
-                                                                        );
-                                                                    }
-                                                                );
+                                                                personRepository
+                                                                    .update(
+                                                                        person
+                                                                    )
+                                                                    .finally(
+                                                                        () => {
+                                                                            setLoading(
+                                                                                false
+                                                                            );
+                                                                            setEditIndex(
+                                                                                undefined
+                                                                            );
+                                                                        }
+                                                                    );
                                                             }}
                                                         >
                                                             <FontAwesomeIcon
@@ -265,7 +269,7 @@ function PersonPage() {
                 }}
                 handleConfirm={({ person }) => {
                     setLoading(true);
-                    PersonRepository.save(person).then(() => {
+                    personRepository.save(person).then(() => {
                         setLoading(false);
                         NotificationService.success(
                             "Novo registro criado com sucesso"

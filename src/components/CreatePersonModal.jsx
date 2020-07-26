@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Form } from "react-bootstrap";
 
-/**
- *
- */
 export default function CreatePersonModal({
     id,
     show,
