@@ -150,7 +150,7 @@ describe("PersonRepository", () => {
         expect(responseJoao.docs.length).toEqual(2);
     });
 
-    it("findPerson: search by initials happy path", async () => {
+    xit("findPerson: search by initials happy path", async () => {
         await saveSamplePerson("João da Silva");
         await saveSamplePerson("Maria da Silva");
         await saveSamplePerson("Joaquim Fragoso");

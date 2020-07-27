@@ -56,7 +56,9 @@ export default class PersonRepository {
         let upperCaseRegex = new RegExp("^[A-Z]+$");
 
         if (upperCaseRegex.test(searchToken)) {
-            return this.findYokoshiByInitials(searchToken);
+            // disabled until we solve performance issues
+            // return this.findYokoshiByInitials(searchToken);
+            return this.findYokoshiByName(searchToken);
         } else {
             return this.findYokoshiByName(searchToken);
         }

@@ -8,7 +8,7 @@ export default class PresenceRepository {
         this.idGenerator = idGenerator;
     }
 
-    static getDocType() {
+    getDocType() {
         return "presence";
     }
 
@@ -16,7 +16,7 @@ export default class PresenceRepository {
         // TODO: adaptar formato do json de resposta
         return this.db.find({
             selector: {
-                type: PresenceRepository.getDocType(),
+                type: this.getDocType(),
                 "event._id": event._id,
             },
         });
@@ -28,7 +28,7 @@ export default class PresenceRepository {
 
         return this.db.find({
             selector: {
-                type: PresenceRepository.getDocType(),
+                type: this.getDocType(),
                 dateTime: {
                     $gte: startOfStartDate,
                     $lte: endOfEndDate,

@@ -66,19 +66,21 @@ export default function CreatePersonModal({
                         </option>
                     </Form.Control>
                 </Form.Group>
-                <Form.Group controlId="mtaiSelect">
-                    <Form.Label>Faz parte do Mahikari-tai?</Form.Label>
-                    <Form.Control
-                        as="select"
-                        value={isMtai}
-                        onChange={(e) => {
-                            setIsMtai(JSON.parse(e.target.value));
-                        }}
-                    >
-                        <option value={false}>Não</option>
-                        <option value={true}>Sim</option>
-                    </Form.Control>
-                </Form.Group>
+                {presenceType === "kumite" && (
+                    <Form.Group controlId="mtaiSelect">
+                        <Form.Label>Faz parte do Mahikari-tai?</Form.Label>
+                        <Form.Control
+                            as="select"
+                            value={isMtai}
+                            onChange={(e) => {
+                                setIsMtai(JSON.parse(e.target.value));
+                            }}
+                        >
+                            <option value={false}>Não</option>
+                            <option value={true}>Sim</option>
+                        </Form.Control>
+                    </Form.Group>
+                )}
             </Modal.Body>
 
             <Modal.Footer>
