@@ -1,6 +1,5 @@
 import { normalizeName } from "../utils/StringUtils";
 import { createEmptyPage } from "../utils/Paginator";
-import { personRepository } from "./ApplicationContext";
 
 export default class PersonRepository {
     db;
@@ -11,7 +10,7 @@ export default class PersonRepository {
         this.idGenerator = idGenerator;
     }
 
-    static getDocType() {
+    getDocType() {
         return "person";
     }
 
@@ -25,9 +24,16 @@ export default class PersonRepository {
         let searchTerm =
             uppercaseSearchTerm.substring(upperSearchToken.length) + ".*";
 
+        await this.db.createIndex({
+            index: {
+                fields: ["type", "name"],
+                ddoc: "type-name-index",
+            },
+        });
+
         return this.db.find({
             selector: {
-                type: personRepository.getDocType(),
+                type: this.getDocType(),
                 name: {
                     $regex: new RegExp(searchTerm, "iu"),
                 },
@@ -42,9 +48,9 @@ export default class PersonRepository {
      * @param searchTerm
      */
     findPerson = async (searchToken) => {
-        // busca vazia: retorna lista vazia ou abaixo de 3 caracteres
-        if (!searchToken || searchToken.length < 3) {
-            return [Promise.resolve(createEmptyPage())];
+        // busca vazia: retorna lista vazia ou abaixo de 2 caracteres
+        if (!searchToken || searchToken.length < 2) {
+            return Promise.resolve(createEmptyPage());
         }
 
         let upperCaseRegex = new RegExp("^[A-Z]+$");
@@ -80,7 +86,7 @@ export default class PersonRepository {
     countPerson = async () => {
         let result = await this.db.find({
             selector: {
-                type: personRepository.getDocType(),
+                type: this.getDocType(),
             },
         });
 
@@ -93,8 +99,14 @@ export default class PersonRepository {
     }
 
     async save({ name, isKumite, isMtai }) {
+        let trimmedName = (name || "").trim();
+
+        if (!trimmedName) {
+            throw Error("Por gentileza, informe um nome");
+        }
+
         let newPerson = {
-            name: name,
+            name: trimmedName,
             type: "person",
             isMtai: isMtai,
             isMiKumite: !isKumite,

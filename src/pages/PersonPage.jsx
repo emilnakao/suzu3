@@ -21,9 +21,6 @@ import {
  * Screen to manage person registries
  */
 function PersonPage() {
-    /**
-     * Hook for person name search input
-     */
     const { value: personSearchToken, bind: bindPersonSearchToken } = useInput(
         ""
     );
@@ -41,6 +38,10 @@ function PersonPage() {
         hanRepository.findAll().then((response) => {
             setHanList(response.docs);
         });
+
+        personRepository.countPerson().then((response) => {
+            setTotalPersonCount(response);
+        });
     }, []);
 
     /**
@@ -51,19 +52,19 @@ function PersonPage() {
         debouncedSearchTerm,
     ]);
 
-    /**
-     * Feedback for async operations
-     */
     const [loading, setLoading] = useState(false);
 
     const [showCreatePersonModal, setShowCreatePersonModal] = useState(false);
+
+    const [totalPersonCount, setTotalPersonCount] = useState(0);
 
     return (
         <React.Fragment>
             <div className="flex-fill d-flex">
                 <div className="card mt-2 mb-2 mx-2 flex-fill">
                     <h5 className="card-header">
-                        <FontAwesomeIcon icon={faUserFriends} /> Pessoas{" "}
+                        <FontAwesomeIcon icon={faUserFriends} /> Pessoas (Total
+                        de registros: {totalPersonCount} )
                     </h5>
                     <div className="card-body">
                         <div className="form-inline">

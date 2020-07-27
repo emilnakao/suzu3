@@ -19,7 +19,7 @@ function AdminPage({ csvImporter }) {
     };
 
     return (
-        <div role="main" className="w-100 vh-100 jumbotron">
+        <div role="main" className="w-100 vh-100">
             <div className="col-md-12">
                 {/* *********************************************************** */}
                 {/* Person Import */}

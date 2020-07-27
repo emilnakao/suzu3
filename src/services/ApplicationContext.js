@@ -2,10 +2,10 @@ import EventRepository from "./EventRepository";
 import EventTypeRepository from "./EventTypeRepository";
 import HanRepository from "./HanRepository";
 import { CSVImporter } from "./CSVImporter";
+import PresenceRepository from "./PresenceRepository";
 
 const { default: PersonRepository } = require("./PersonRepository");
 const { default: PouchDBProvider } = require("./PouchDBProvider");
-const { default: PresenceRepository } = require("./PresenceRepository");
 const { default: IdGenerator } = require("../utils/IdGenerator");
 
 // Common initialization arguments for repositories
