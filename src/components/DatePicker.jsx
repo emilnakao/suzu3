@@ -1,7 +1,9 @@
 import React from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import { formatDate } from "../utils/StringUtils";
-import MomentLocaleUtils from "react-day-picker/moment";
+import MomentLocaleUtils, {
+    formatDate,
+    parseDate,
+} from "react-day-picker/moment";
 import "moment/locale/pt";
 
 export default function DatePicker({ value, onChange }) {
@@ -15,6 +17,7 @@ export default function DatePicker({ value, onChange }) {
                 localeUtils: MomentLocaleUtils,
             }}
             formatDate={formatDate}
+            parseDate={parseDate}
             onDayChange={onChange}
             inputProps={{ className: "form-control" }}
         />

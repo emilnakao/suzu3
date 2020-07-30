@@ -59,7 +59,12 @@ export default function SelectEventModal({
                         />
                     </div>
                     <div className="col">
-                        <DatePicker value={date} changeHandler={setDate} />
+                        <DatePicker
+                            value={date}
+                            onChange={(date) => {
+                                setDate(date);
+                            }}
+                        />
                     </div>
                 </div>
             </Modal.Body>
