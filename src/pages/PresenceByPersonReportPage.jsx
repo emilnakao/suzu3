@@ -5,6 +5,7 @@ import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { getPersonCssClassFromPresence } from "../utils/CssClassProvider";
 import useSortableData from "../hooks/useSortableData";
 import { presenceRepository } from "../services/ApplicationContext";
+import DatePicker from "../components/DatePicker";
 
 /**
  *
@@ -66,31 +67,9 @@ function PresenceByPersonReportPage() {
                 <h1>Presenças por Pessoa</h1>
                 <div className="row">
                     <div className="col">
-                        <DayPickerInput
-                            value={startDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setStartDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={startDate} onChange={setStartDate} />
                         &nbsp; a &nbsp;
-                        <DayPickerInput
-                            value={endDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setEndDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={endDate} onChange={setEndDate} />
                         <button
                             type="button"
                             className="btn btn-primary"

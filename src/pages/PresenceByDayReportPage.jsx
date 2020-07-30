@@ -3,6 +3,7 @@ import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import useSortableData from "../hooks/useSortableData";
 import { presenceRepository } from "../services/ApplicationContext";
+import DatePicker from "../components/DatePicker";
 
 /**
  *
@@ -69,31 +70,9 @@ function PresenceByDayReportPage() {
                 <h1>Presenças por Dia</h1>
                 <div className="row">
                     <div className="col">
-                        <DayPickerInput
-                            value={startDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setStartDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={startDate} onChange={setStartDate} />
                         &nbsp; a &nbsp;
-                        <DayPickerInput
-                            value={endDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setEndDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={endDate} onChange={setEndDate} />
                         <button
                             type="button"
                             className="btn btn-primary"
