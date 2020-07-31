@@ -54,7 +54,7 @@
         "react-dropzone": "^10.2.1",
         "react-hotkeys": "1.1.4",
         "react-router-dom": "^5.1.2",
-        "react-scripts": "3.4.1",
+        "react-scripts": "3.3.0",
         "react-select": "^3.0.8",
         "react-switch": "^5.0.1",
         "react-toastify": "^5.5.0"
@@ -62,7 +62,7 @@
     "scripts": {
         "start": "rescripts start",
         "build": "rescripts build",
-        "test": "rescripts test --watchAll=false --runInBand --env=jest-environment-jsdom-sixteen",
+        "test": "rescripts test --watchAll=false --runInBand",
         "eject": "react-scripts eject",
         "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
         "postinstall": "electron-builder install-app-deps",
@@ -93,8 +93,6 @@
         "electron": "^7.1.7",
         "electron-builder": "^22.7.0",
         "enzyme": "^3.11.0",
-        "jest-cli": "^26.1.0",
-        "jest-environment-jsdom-sixteen": "^1.0.3",
         "typescript": "^3.7.4",
         "wait-on": "^3.3.0"
     }
