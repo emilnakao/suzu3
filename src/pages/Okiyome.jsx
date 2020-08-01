@@ -7,7 +7,6 @@ import PresenceListWidget from "../components/PresenceListWidget";
 
 import {HotKeys} from 'react-hotkeys';
 import Switch from "react-switch";
-import PresenceService from "../services/PresenceService";
 
 const keyMap = {
     moveUp: 'up',
@@ -26,7 +25,7 @@ class Okiyome extends Component {
             showKumite: true
         };
 
-        PresenceService.findEventPresences().then(result => {
+        props.presenceRepository.findEventPresences().then(result => {
             console.log(result);
             this.setState({presences:result.objects});
         });

@@ -11,7 +11,7 @@ import "./App.css";
 import AdminPage from "./pages/AdminPage";
 import HomePage from "./pages/HomePage";
 import SelfCheckInPage from "./pages/SelfCheckInPage";
-import PresenceRepository from "./services/PresenceRepository";
+import { presenceRepository } from "./services/ApplicationContext";
 import PersonPage from "./pages/PersonPage";
 import PresenceByPersonReportPage from "./pages/PresenceByPersonReportPage";
 import PresenceByDayReportPage from "./pages/PresenceByDayReportPage";
@@ -43,7 +43,7 @@ function App() {
             return;
         }
 
-        PresenceRepository.findEventPresences(currentEvent).then((response) => {
+        presenceRepository.findEventPresences(currentEvent).then((response) => {
             dispatchPresenceAction({
                 type: "init",
                 list: response.docs || [],
@@ -59,7 +59,7 @@ function App() {
                 );
                 return { ...state, list: action.list };
             case "add":
-                let newPresence = PresenceRepository.savePresence({
+                let newPresence = presenceRepository.savePresence({
                     person: action.person,
                     isFirstTime: action.isFirstTime,
                     event: currentEvent,
@@ -75,7 +75,7 @@ function App() {
                     return elem.person._id !== action.presence.person._id;
                 });
 
-                PresenceRepository.removePresence(action.presence);
+                presenceRepository.removePresence(action.presence);
 
                 return { ...state, list: newList };
             default:
@@ -160,14 +160,6 @@ function App() {
                                     </Link>
                                 </div>
                             </li>
-                            {/*<liclassName="nav-itemdropdown">*/}
-                            {/*<aclassName="nav-linkdropdown-toggle"href="/"id="operationDropdown"data-toggle="dropdown"aria-haspopup="true"aria-expanded="false">Relatórios</a>*/}
-                            {/*<divclassName="dropdown-menu"aria-labelledby="operationDropdown">*/}
-                            {/*<aclassName="dropdown-item"href="#">PresençasporEvento</a>*/}
-                            {/*<aclassName="dropdown-item"href="#">PresençasporKumite</a>*/}
-                            {/*<aclassName="dropdown-item"href="#">PresençasporMi-Kumite</a>*/}
-                            {/*</div>*/}
-                            {/*</li>*/}
                         </ul>
                     </div>
                 </nav>
@@ -178,6 +170,10 @@ function App() {
                         render={(props) => (
                             <SelfCheckInPage
                                 {...props}
+                                presenceRepository
+                                eventTypeRepository
+                                eventRepository
+                                personRepository
                                 presenceList={currentEventPresences.list}
                                 dispatchPresenceAction={(action) => {
                                     dispatchPresenceAction(action);
@@ -190,7 +186,6 @@ function App() {
                             />
                         )}
                     />
-                    {/* <Route exactpath="/okiyome" component={Okiyome} /> */}
                     <Route
                         exact
                         path="/admin"

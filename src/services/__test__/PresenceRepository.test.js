@@ -1,25 +1,19 @@
-import PouchDBProvider from "../PouchDBProvider"
-import {
-    PresenceRepository
-} from "../PresenceRepository"
+import PouchDBProvider from "../PouchDBProvider";
+import { PresenceRepository } from "../PresenceRepository";
 
-describe('PresenceRepository', () => {
-
-    let db, repository
+describe("PresenceRepository", () => {
+    let db, repository;
 
     beforeEach(async () => {
-        db = PouchDBProvider.create('presenceRepositoryTest')
-        repository = new PresenceRepository('presenceRepositoryTest')
-        repository.db = db
+        db = PouchDBProvider.create("presenceRepositoryTest");
+        repository = new PresenceRepository({ db, undefined });
 
-        // 
-    })
+        //
+    });
 
-    it.skip('Finds all event types', async () => {
-
-    })
+    it.skip("Finds all event types", async () => {});
 
     afterEach(async () => {
-        await db.destroy()
-    })
-})
+        await db.destroy();
+    });
+});
