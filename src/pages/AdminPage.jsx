@@ -1,11 +1,12 @@
 import React from "react";
 import FileUpload from "../components/FileUpload";
+import { csvImporter } from "../services/ApplicationContext";
 
 /**
  *
  * @param {*} props
  */
-function AdminPage({ csvImporter }) {
+function AdminPage() {
     const loadPersonCSV = (filePath) => {
         csvImporter.importPerson(filePath);
     };
