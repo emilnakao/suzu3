@@ -87,6 +87,7 @@
         ]
     },
     "devDependencies": {
+        "@babel/core": "^7.11.0",
         "@babel/helper-compilation-targets": "^7.10.4",
         "@rescripts/cli": "^0.0.13",
         "@rescripts/rescript-env": "^0.0.11",
