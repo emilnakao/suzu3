@@ -62,7 +62,7 @@
     "scripts": {
         "start": "rescripts start",
         "build": "rescripts build",
-        "test": "rescripts test --watchAll=false --runInBand --env=jest-environment-jsdom-sixteen",
+        "test": "rescripts test --watchAll=false",
         "eject": "react-scripts eject",
         "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
         "postinstall": "electron-builder install-app-deps",
@@ -87,15 +87,12 @@
         ]
     },
     "devDependencies": {
-        "@babel/core": "^7.11.0",
-        "@babel/helper-compilation-targets": "^7.10.4",
         "@rescripts/cli": "^0.0.13",
         "@rescripts/rescript-env": "^0.0.11",
         "concurrently": "^5.0.2",
         "electron": "^7.1.7",
         "electron-builder": "^22.7.0",
         "enzyme": "^3.11.0",
-        "jest-environment-jsdom-sixteen": "^1.0.3",
         "typescript": "^3.7.4",
         "wait-on": "^3.3.0"
     }
