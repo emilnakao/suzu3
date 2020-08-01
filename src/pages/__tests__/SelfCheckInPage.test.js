@@ -1,20 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
+import { act } from "react-dom/test-utils";
 import SelfCheckInPage from "../SelfCheckInPage";
 
-describe('SelfCheckInPage', () => {
+jest.mock("pouchdb");
 
-    beforeEach(async () => {
-        // db = PouchDBProvider.create(PouchDBProvider.getDefaultDatabaseName())
-        // await db.info()
-    })
-    it('renders without crashing', () => {
-        const div = document.createElement('div');
-        ReactDOM.render( < SelfCheckInPage / > , div);
-        ReactDOM.unmountComponentAtNode(div);
+it("renders without crashing", () => {
+    const div = document.createElement("div");
+    act(() => {
+        ReactDOM.render(<SelfCheckInPage />, div);
     });
-
-    afterEach(async () => {
-        // await db.destroy()
-    })
-})
+    ReactDOM.unmountComponentAtNode(div);
+});

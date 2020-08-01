@@ -10,18 +10,17 @@ import CreatePersonModal from "../components/CreatePersonModal";
 import { useAsync } from "../hooks/useAsync";
 import useDebounce from "../hooks/useDebounce";
 import { useInput } from "../hooks/useInput";
-import HanRepository from "../services/HanRepository";
 import NotificationService from "../services/NotificationService";
-import PersonRepository from "../services/PersonRepository";
 import moment from "moment";
+import {
+    hanRepository,
+    personRepository,
+} from "../services/ApplicationContext";
 
 /**
  * Screen to manage person registries
  */
 function PersonPage() {
-    /**
-     * Hook for person name search input
-     */
     const { value: personSearchToken, bind: bindPersonSearchToken } = useInput(
         ""
     );
@@ -36,8 +35,12 @@ function PersonPage() {
     const [hanList, setHanList] = useState([]);
 
     useEffect(() => {
-        HanRepository.findAll().then((response) => {
+        hanRepository.findAll().then((response) => {
             setHanList(response.docs);
+        });
+
+        personRepository.countPerson().then((response) => {
+            setTotalPersonCount(response);
         });
     }, []);
 
@@ -45,23 +48,23 @@ function PersonPage() {
      * List of name suggestions according to what the user types.
      */
     const personList = useAsync([
-        PersonRepository.findPerson,
+        personRepository.findPerson,
         debouncedSearchTerm,
     ]);
 
-    /**
-     * Feedback for async operations
-     */
     const [loading, setLoading] = useState(false);
 
     const [showCreatePersonModal, setShowCreatePersonModal] = useState(false);
+
+    const [totalPersonCount, setTotalPersonCount] = useState(0);
 
     return (
         <React.Fragment>
             <div className="flex-fill d-flex">
                 <div className="card mt-2 mb-2 mx-2 flex-fill">
                     <h5 className="card-header">
-                        <FontAwesomeIcon icon={faUserFriends} /> Pessoas{" "}
+                        <FontAwesomeIcon icon={faUserFriends} /> Pessoas (Total
+                        de registros: {totalPersonCount} )
                     </h5>
                     <div className="card-body">
                         <div className="form-inline">
@@ -227,18 +230,20 @@ function PersonPage() {
                                                                 setLoading(
                                                                     true
                                                                 );
-                                                                PersonRepository.update(
-                                                                    person
-                                                                ).finally(
-                                                                    () => {
-                                                                        setLoading(
-                                                                            false
-                                                                        );
-                                                                        setEditIndex(
-                                                                            undefined
-                                                                        );
-                                                                    }
-                                                                );
+                                                                personRepository
+                                                                    .update(
+                                                                        person
+                                                                    )
+                                                                    .finally(
+                                                                        () => {
+                                                                            setLoading(
+                                                                                false
+                                                                            );
+                                                                            setEditIndex(
+                                                                                undefined
+                                                                            );
+                                                                        }
+                                                                    );
                                                             }}
                                                         >
                                                             <FontAwesomeIcon
@@ -265,7 +270,7 @@ function PersonPage() {
                 }}
                 handleConfirm={({ person }) => {
                     setLoading(true);
-                    PersonRepository.save(person).then(() => {
+                    personRepository.save(person).then(() => {
                         setLoading(false);
                         NotificationService.success(
                             "Novo registro criado com sucesso"

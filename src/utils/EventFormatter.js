@@ -1,14 +1,13 @@
 class EventFormatter {
-
     formatEventDate(event) {
         if (!event) {
-            return '--/--/----';
+            return "--/--/----";
         }
 
         if (event.date) {
             return event.date;
         } else {
-            return 'Dia não definido.'
+            return "Dia não definido.";
         }
     }
 }

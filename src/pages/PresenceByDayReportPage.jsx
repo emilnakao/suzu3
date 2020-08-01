@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import DayPickerInput from "react-day-picker/DayPickerInput";
-import PresenceRepository from "../services/PresenceRepository";
 import moment from "moment";
 import useSortableData from "../hooks/useSortableData";
+import { presenceRepository } from "../services/ApplicationContext";
+import DatePicker from "../components/DatePicker";
 
 /**
  *
  * @param {*} props
  */
-function PresenceByDayReportPage(props) {
+function PresenceByDayReportPage() {
     const [startDate, setStartDate] = useState(new Date());
 
     const [endDate, setEndDate] = useState(new Date());
@@ -18,40 +19,49 @@ function PresenceByDayReportPage(props) {
     const { items, requestSort } = useSortableData(presenceList);
 
     const handleSearch = async () => {
-        PresenceRepository.findPresencesByInterval({
-            startDate: startDate,
-            endDate: endDate,
-        }).then((response) => {
-            let groupedResponse = response.docs || [];
-            let counts = groupedResponse.reduce((accumulator, currentValue) => {
-                let dia = moment(currentValue.dateTime).format("DD/MM/YYYY");
+        presenceRepository
+            .findPresencesByInterval({
+                startDate: startDate,
+                endDate: endDate,
+            })
+            .then((response) => {
+                let groupedResponse = response.docs || [];
+                let counts = groupedResponse.reduce(
+                    (accumulator, currentValue) => {
+                        let dia = moment(currentValue.dateTime).format(
+                            "DD/MM/YYYY"
+                        );
 
-                if (!accumulator.hasOwnProperty(dia)) {
-                    accumulator[dia] = {
-                        kumite: 0,
-                        firstTime: 0,
-                        miKumite: 0,
-                        dayAsDate: moment(currentValue.dateTime).startOf("day"),
-                    };
-                }
+                        if (!accumulator.hasOwnProperty(dia)) {
+                            accumulator[dia] = {
+                                kumite: 0,
+                                firstTime: 0,
+                                miKumite: 0,
+                                dayAsDate: moment(
+                                    currentValue.dateTime
+                                ).startOf("day"),
+                            };
+                        }
 
-                if (currentValue.firstTime) {
-                    accumulator[dia].firstTime++;
-                } else if (currentValue.person.isMiKumite) {
-                    accumulator[dia].miKumite++;
-                } else {
-                    accumulator[dia].kumite++;
-                }
+                        if (currentValue.firstTime) {
+                            accumulator[dia].firstTime++;
+                        } else if (currentValue.person.isMiKumite) {
+                            accumulator[dia].miKumite++;
+                        } else {
+                            accumulator[dia].kumite++;
+                        }
 
-                return accumulator;
-            }, {});
+                        return accumulator;
+                    },
+                    {}
+                );
 
-            groupedResponse = Object.keys(counts).map((k) => {
-                return { day: k, ...counts[k] };
+                groupedResponse = Object.keys(counts).map((k) => {
+                    return { day: k, ...counts[k] };
+                });
+
+                setPresenceList(groupedResponse);
             });
-
-            setPresenceList(groupedResponse);
-        });
     };
 
     return (
@@ -60,31 +70,9 @@ function PresenceByDayReportPage(props) {
                 <h1>Presenças por Dia</h1>
                 <div className="row">
                     <div className="col">
-                        <DayPickerInput
-                            value={startDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setStartDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={startDate} onChange={setStartDate} />
                         &nbsp; a &nbsp;
-                        <DayPickerInput
-                            value={endDate}
-                            todayButton="Hoje"
-                            locale="pt"
-                            className={"form-control"}
-                            dayPickerProps={{
-                                locale: "pt",
-                                format: "DD/MM/YYYY",
-                            }}
-                            onDayChange={setEndDate}
-                            inputProps={{ className: "form-control" }}
-                        />
+                        <DatePicker value={endDate} onChange={setEndDate} />
                         <button
                             type="button"
                             className="btn btn-primary"

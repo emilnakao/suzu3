@@ -1,24 +1,21 @@
-import PouchDBProvider from './PouchDBProvider';
+export default class EventTypeRepository {
+    db;
+    idGenerator;
 
-export class EventTypeRepository {
-
-    db
-
-    constructor() {
-        this.db = PouchDBProvider.create(PouchDBProvider.getDefaultDatabaseName())
+    constructor({ db, idGenerator }) {
+        this.db = db;
+        this.idGenerator = idGenerator;
     }
 
-    static getDocType() {
-        return 'eventType'
+    getDocType() {
+        return "eventType";
     }
 
     async findAll() {
         return this.db.find({
             selector: {
-                type: EventTypeRepository.getDocType()
+                type: this.getDocType(),
             },
         });
     }
 }
-
-export default new EventTypeRepository();

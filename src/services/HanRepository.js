@@ -1,24 +1,21 @@
-import PouchDBProvider from './PouchDBProvider';
+export default class HanRepository {
+    db;
+    idGenerator;
 
-export class HanRepository {
-
-    db
-
-    constructor() {
-        this.db = PouchDBProvider.create(PouchDBProvider.getDefaultDatabaseName())
+    constructor({ db, idGenerator }) {
+        this.db = db;
+        this.idGenerator = idGenerator;
     }
 
     static getDocType() {
-        return 'han'
+        return "han";
     }
 
     async findAll() {
         return this.db.find({
             selector: {
-                type: HanRepository.getDocType()
+                type: HanRepository.getDocType(),
             },
         });
     }
 }
-
-export default new HanRepository();
