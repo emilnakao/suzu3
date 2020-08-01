@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import DayPickerInput from "react-day-picker/DayPickerInput";
 import moment from "moment";
 import useSortableData from "../hooks/useSortableData";
 import { presenceRepository } from "../services/ApplicationContext";
