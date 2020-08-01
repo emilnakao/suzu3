@@ -8,8 +8,8 @@ import TodayEventWidget from "../components/TodayEventWidget";
 import { useAsync } from "../hooks/useAsync";
 import useDebounce from "../hooks/useDebounce";
 import { useInput } from "../hooks/useInput";
-import PersonRepository from "../services/PersonRepository";
 import SelfCheckInLine from "./SelfCheckInLine";
+import { personRepository } from "../services/ApplicationContext";
 
 /**
  * Screen where the user searches for his name, and toggles his presence in the current event.
@@ -43,7 +43,7 @@ function SelfCheckInPage({
      * List of name suggestions according to what the user types.
      */
     const personList = useAsync([
-        PersonRepository.findPerson,
+        personRepository.findPerson,
         debouncedSearchTerm,
     ]);
 
@@ -121,7 +121,7 @@ function SelfCheckInPage({
             console.log(
                 "A new person was registered. Saving before confirming presence."
             );
-            savedPerson = await PersonRepository.save(person);
+            savedPerson = await personRepository.save(person);
         }
 
         dispatchPresenceAction({
