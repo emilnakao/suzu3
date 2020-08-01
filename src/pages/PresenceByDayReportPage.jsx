@@ -42,7 +42,7 @@ function PresenceByDayReportPage() {
                             };
                         }
 
-                        if (currentValue.firstTime) {
+                        if (currentValue.isFirstTime) {
                             accumulator[dia].firstTime++;
                         } else if (currentValue.person.isMiKumite) {
                             accumulator[dia].miKumite++;
