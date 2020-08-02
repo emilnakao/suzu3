@@ -44,7 +44,7 @@ export default class PresenceRepository {
             type: "presence",
             event: event,
             isFirstTime: isFirstTime,
-            dateTime: event.date,
+            dateTime: moment(event.date).startOf("day").toDate(),
             begin_date_time: new Date(),
         };
 
