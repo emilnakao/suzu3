@@ -33,8 +33,8 @@ function AdminPage() {
                             <tr>
                                 <th scope="col">id</th>
                                 <th scope="col">name</th>
-                                <th scope="col">is_mikumite</th>
-                                <th scope="col">is_mtai</th>
+                                <th scope="col">isMiKumite</th>
+                                <th scope="col">isMtai</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,7 +93,7 @@ function AdminPage() {
                             <tr>
                                 <th scope="col">id</th>
                                 <th scope="col">name</th>
-                                <th scope="col">parent_han_id</th>
+                                <th scope="col">parentHanId</th>
                             </tr>
                         </thead>
                         <tbody>
