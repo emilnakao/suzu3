@@ -96,8 +96,30 @@ export default class PersonRepository {
     };
 
     async update(person) {
+        let trimmedName = (person.name || "").trim();
+
+        if (!trimmedName) {
+            throw Error("Por gentileza, informe um nome");
+        }
+
         person.updateDateTime = new Date();
-        this.db.put(person);
+        let newId = this.idGenerator.generatePersonId(person);
+
+        if (newId === person._id) {
+            await this.db.put(person);
+        } else {
+            let newPerson = {
+                name: trimmedName,
+                type: "person",
+                isMtai: person.isMtai,
+                isMiKumite: person.isMiKumite,
+                creationDateTime: new Date(),
+                updateDateTime: new Date(),
+            };
+            newPerson._id = newId;
+            await this.db.put(newPerson);
+            await this.db.remove(person);
+        }
     }
 
     async save({ name, isKumite, isMtai }) {

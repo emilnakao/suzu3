@@ -31,6 +31,9 @@ function PersonPage() {
     const debouncedSearchTerm = useDebounce(personSearchToken, 500);
 
     const [editIndex, setEditIndex] = useState(undefined);
+    const [editName, setEditName] = useState(undefined);
+    const [editIsMiKumite, setEditIsMiKumite] = useState(undefined);
+    const [editIsMtai, setEditIsMtai] = useState(undefined);
 
     const [hanList, setHanList] = useState([]);
 
@@ -149,6 +152,15 @@ function PersonPage() {
                                                                 setEditIndex(
                                                                     index
                                                                 );
+                                                                setEditName(
+                                                                    person.name
+                                                                );
+                                                                setEditIsMtai(
+                                                                    person.isMtai
+                                                                );
+                                                                setEditIsMiKumite(
+                                                                    person.isMiKumite
+                                                                );
                                                             }}
                                                         >
                                                             <FontAwesomeIcon
@@ -165,12 +177,15 @@ function PersonPage() {
                                                         <input
                                                             type="text"
                                                             className="form-control form-control-sm"
-                                                            value={person.name}
+                                                            value={editName}
                                                             onChange={(
                                                                 event
                                                             ) => {
                                                                 person.name =
                                                                     event.target.value;
+                                                                setEditName(
+                                                                    person.name
+                                                                );
                                                             }}
                                                         />
                                                     </td>
@@ -178,11 +193,14 @@ function PersonPage() {
                                                         <input
                                                             type="checkbox"
                                                             className="form-control"
-                                                            defaultChecked={
-                                                                !person.isMiKumite
+                                                            checked={
+                                                                !editIsMiKumite
                                                             }
                                                             onChange={() => {
                                                                 person.isMiKumite = !person.isMiKumite;
+                                                                setEditIsMiKumite(
+                                                                    person.isMiKumite
+                                                                );
                                                             }}
                                                         />
                                                     </td>
@@ -190,11 +208,12 @@ function PersonPage() {
                                                         <input
                                                             type="checkbox"
                                                             className="form-control"
-                                                            defaultChecked={
-                                                                person.isMtai
-                                                            }
+                                                            checked={editIsMtai}
                                                             onChange={() => {
                                                                 person.isMtai = !person.isMtai;
+                                                                setEditIsMtai(
+                                                                    person.isMtai
+                                                                );
                                                             }}
                                                         />
                                                     </td>
@@ -230,6 +249,11 @@ function PersonPage() {
                                                                 setLoading(
                                                                     true
                                                                 );
+
+                                                                person.name = editName;
+                                                                person.isMiKumite = editIsMiKumite;
+                                                                person.isMtai = editIsMtai;
+
                                                                 personRepository
                                                                     .update(
                                                                         person
@@ -240,6 +264,15 @@ function PersonPage() {
                                                                                 false
                                                                             );
                                                                             setEditIndex(
+                                                                                undefined
+                                                                            );
+                                                                            setEditName(
+                                                                                undefined
+                                                                            );
+                                                                            setEditIsMiKumite(
+                                                                                undefined
+                                                                            );
+                                                                            setEditIsMtai(
                                                                                 undefined
                                                                             );
                                                                         }
