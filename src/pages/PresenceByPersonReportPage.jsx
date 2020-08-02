@@ -84,8 +84,22 @@ function PresenceByPersonReportPage() {
                     <thead>
                         <tr>
                             <td>#</td>
-                            <td onClick={() => requestSort("name")}>Nome</td>
-                            <td onClick={() => requestSort("hanName")}>Han</td>
+                            <td onClick={() => requestSort("name")}>
+                                <u
+                                    title="Clique para ordenar"
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    Nome
+                                </u>
+                            </td>
+                            <td onClick={() => requestSort("hanName")}>
+                                <u
+                                    title="Clique para ordenar"
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    Han
+                                </u>
+                            </td>
                             <td>Qtde. Presenças</td>
                         </tr>
                     </thead>

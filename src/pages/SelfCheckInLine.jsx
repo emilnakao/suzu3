@@ -35,7 +35,7 @@ function SelfCheckInLine({
                 return false;
             }
 
-            return elem.person.id === person.id;
+            return elem.person._id === person._id;
         });
 
         if (candidates.length > 0) {
