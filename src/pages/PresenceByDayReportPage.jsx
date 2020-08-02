@@ -27,7 +27,7 @@ function PresenceByDayReportPage() {
                 let groupedResponse = response.docs || [];
                 let counts = groupedResponse.reduce(
                     (accumulator, currentValue) => {
-                        let dia = moment(currentValue.dateTime).format(
+                        let dia = moment(currentValue.event.date).format(
                             "DD/MM/YYYY"
                         );
 
@@ -37,7 +37,7 @@ function PresenceByDayReportPage() {
                                 firstTime: 0,
                                 miKumite: 0,
                                 dayAsDate: moment(
-                                    currentValue.dateTime
+                                    currentValue.event.date
                                 ).startOf("day"),
                             };
                         }
@@ -88,7 +88,12 @@ function PresenceByDayReportPage() {
                         <tr>
                             <td>#</td>
                             <td onClick={() => requestSort("dayAsDate")}>
-                                Dia
+                                <u
+                                    title="Clique para ordenar"
+                                    style={{ cursor: "pointer" }}
+                                >
+                                    Dia
+                                </u>
                             </td>
                             <td>Praticante</td>
                             <td>Primeira Vez</td>
