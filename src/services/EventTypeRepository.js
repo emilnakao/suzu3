@@ -18,4 +18,17 @@ export default class EventTypeRepository {
             },
         });
     }
+
+    async save({ name }) {
+        let newEventType = {
+            name: name,
+            type: this.getDocType(),
+        };
+
+        newEventType._id = this.idGenerator.generateEventTypeId(newEventType);
+
+        await this.db.put(newEventType);
+
+        return newEventType;
+    }
 }

@@ -22,30 +22,76 @@ export default class PresenceRepository {
         });
     }
 
-    async findPresencesByInterval({ startDate, endDate }) {
-        let startOfStartDate = moment(startDate).startOf("day").toDate();
-        let endOfEndDate = moment(endDate).endOf("day").toDate();
+    async findPresencesByInterval({
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        dayOfWeek,
+    }) {
+        // basic validation
+        if (!startDate || !endDate) {
+            return Promise.reject(
+                "É obrigatório passar uma data inicial e uma data final."
+            );
+        }
+
+        // datetime interval
+        let startOfStartDateMoment = moment(startDate).startOf("day");
+        let endOfEndDateMoment = moment(endDate).endOf("day");
+
+        if (startTime) {
+            let momentStartTime = moment(startTime, "HH:mm");
+            startOfStartDateMoment = moment(startDate)
+                .hours(momentStartTime.hours())
+                .minutes(momentStartTime.minutes());
+        }
+
+        if (endTime) {
+            let momentEndTime = moment(endTime, "HH:mm");
+            endOfEndDateMoment = moment(endDate)
+                .hours(momentEndTime.hours())
+                .minutes(momentEndTime.minutes());
+        }
+
+        if (startOfStartDateMoment.isAfter(endOfEndDateMoment)) {
+            return Promise.reject("Período de busca inválido.");
+        }
+
+        let selectorObject = {
+            type: this.getDocType(),
+            dateTime: {
+                $gte: startOfStartDateMoment.toDate(),
+                $lte: endOfEndDateMoment.toDate(),
+            },
+        };
+
+        // day of week optional filter
+        if (dayOfWeek) {
+            selectorObject.dayOfWeek = { $eq: `${dayOfWeek}` };
+        }
 
         return this.db.find({
-            selector: {
-                type: this.getDocType(),
-                dateTime: {
-                    $gte: startOfStartDate,
-                    $lte: endOfEndDate,
-                },
-            },
+            selector: selectorObject,
         });
     }
 
     async savePresence({ person, event, isFirstTime }) {
+        let momentEventDate = moment(event.date);
+
         // creating a new presence
         let newPresence = {
             person: person,
             type: "presence",
             event: event,
             isFirstTime: isFirstTime,
-            dateTime: moment(event.date).startOf("day").toDate(),
-            begin_date_time: new Date(),
+            dateTime: moment(new Date())
+                .year(momentEventDate.year())
+                .month(momentEventDate.month())
+                .date(momentEventDate.date())
+                .toDate(),
+            registrationDateTime: new Date(),
+            dayOfWeek: moment(event.date).format("E"), // ISO day of week: 1..7 = Sun..Sat
         };
 
         newPresence._id = this.idGenerator.generatePresenceId(newPresence);
