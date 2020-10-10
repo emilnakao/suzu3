@@ -84,7 +84,7 @@ function AdminPage() {
                 <h3>Importação de Pessoas</h3>
                 <section className="container">
                     <p>Exemplo de planilha (no formato .csv)</p>
-                    <table class="table table-bordered table-sm">
+                    <table className="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">id</th>
@@ -118,7 +118,7 @@ function AdminPage() {
                 <h3>Importação de Tipos de Evento</h3>
                 <section className="container">
                     <p>Exemplo de planilha (no formato .csv)</p>
-                    <table class="table table-bordered table-sm">
+                    <table className="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">id</th>
@@ -146,7 +146,7 @@ function AdminPage() {
                 <h3>Importação de Hans</h3>
                 <section className="container">
                     <p>Exemplo de planilha (no formato .csv)</p>
-                    <table class="table table-bordered table-sm">
+                    <table className="table table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">id</th>

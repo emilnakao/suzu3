@@ -112,7 +112,7 @@ function PresenceListWidget({ presenceList = [] }) {
                     <tbody>
                         {presenceList.map(function (presence, idx) {
                             return (
-                                <tr>
+                                <tr key={idx}>
                                     <td className="ml-3">{idx + 1}</td>
                                     <td>
                                         <FontAwesomeIcon
