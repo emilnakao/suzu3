@@ -10,6 +10,7 @@ import {
 class NotificationService {
 
     error(title, message) {
+        
         toast.error(title, message)
     }
 

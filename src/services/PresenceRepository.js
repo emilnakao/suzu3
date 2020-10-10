@@ -1,4 +1,5 @@
 import moment from "moment";
+import { getMinutesFromMidnightFromDate, getMinutesFromMidnightFromString } from "../utils/TimeUtils";
 
 export default class PresenceRepository {
     db;
@@ -40,20 +41,6 @@ export default class PresenceRepository {
         let startOfStartDateMoment = moment(startDate).startOf("day");
         let endOfEndDateMoment = moment(endDate).endOf("day");
 
-        if (startTime) {
-            let momentStartTime = moment(startTime, "HH:mm");
-            startOfStartDateMoment = moment(startDate)
-                .hours(momentStartTime.hours())
-                .minutes(momentStartTime.minutes());
-        }
-
-        if (endTime) {
-            let momentEndTime = moment(endTime, "HH:mm");
-            endOfEndDateMoment = moment(endDate)
-                .hours(momentEndTime.hours())
-                .minutes(momentEndTime.minutes());
-        }
-
         if (startOfStartDateMoment.isAfter(endOfEndDateMoment)) {
             return Promise.reject("Período de busca inválido.");
         }
@@ -65,6 +52,20 @@ export default class PresenceRepository {
                 $lte: endOfEndDateMoment.toDate(),
             },
         };
+
+        if (startTime || endTime) {
+            let startMinutesFromMidnight = getMinutesFromMidnightFromString(startTime);
+            let endMinutesFromMidnight = getMinutesFromMidnightFromString(endTime);
+
+            if(startMinutesFromMidnight >= endMinutesFromMidnight){
+                return Promise.reject("Intervalo de horário inválido.");
+            }
+
+            selectorObject.minutesFromMidnight = {
+                $gte: startMinutesFromMidnight,
+                $lte: endMinutesFromMidnight,
+            }
+        }
 
         // day of week optional filter
         if (dayOfWeek && dayOfWeek.value) {
@@ -91,6 +92,7 @@ export default class PresenceRepository {
                 .date(momentEventDate.date())
                 .toDate(),
             registrationDateTime: new Date(),
+            minutesFromMidnight: getMinutesFromMidnightFromDate(new Date()),
             dayOfWeek: moment(event.date).format("E"), // ISO day of week: 1..7 = Sun..Sat
         };
 

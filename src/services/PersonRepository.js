@@ -136,6 +136,7 @@ export default class PersonRepository {
             isMiKumite: !isKumite,
             creationDateTime: new Date(),
             updateDateTime: new Date(),
+            active: true
         };
 
         newPerson._id = this.idGenerator.generatePersonId(newPerson);

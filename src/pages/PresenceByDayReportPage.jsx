@@ -3,8 +3,10 @@ import moment from "moment";
 import useSortableData from "../hooks/useSortableData";
 import { presenceRepository } from "../services/ApplicationContext";
 import DatePicker from "../components/DatePicker";
-import TimePicker from "../components/TimePicker";
+import TimeSelect from "../components/TimeSelect";
 import DayOfWeekSelect from "../components/DayOfWeekSelect";
+import NotificationService from "../services/NotificationService";
+import { logError } from "../utils/Logger";
 
 /**
  *
@@ -30,8 +32,8 @@ function PresenceByDayReportPage() {
             .findPresencesByInterval({
                 startDate: startDate,
                 endDate: endDate,
-                startTime: startTime,
-                endTime: endTime,
+                startTime: startTime ? startTime.value : undefined,
+                endTime: endTime ? endTime.value : undefined,
                 dayOfWeek: dayOfWeek,
             })
             .then((response) => {
@@ -71,6 +73,10 @@ function PresenceByDayReportPage() {
                 });
 
                 setPresenceList(groupedResponse);
+            })
+            .catch((reason) => {
+                logError("PresenceByDayReport", reason);
+                NotificationService.error("Erro", reason);
             });
     };
 
@@ -95,22 +101,19 @@ function PresenceByDayReportPage() {
                     </div>
                 </div>
                 <div className="form-row">
-                    <div class="col-md-2 mb-2">
-                        <div className="form-group">
-                            <label>Horário Início</label>
-                            <TimePicker
+                    <div className="col-md-5 mb-3 ">
+                        <label>Horário de Entrada (Opcional)</label>
+                        <br />
+                        <div className="d-inline-flex">
+                            <TimeSelect
                                 value={startTime}
                                 onChange={setStartTime}
                             />
+                            &nbsp; a &nbsp;
+                            <TimeSelect value={endTime} onChange={setEndTime} />
                         </div>
                     </div>
-                    <div class="col-md-2 mb-2">
-                        <div className="form-group">
-                            <label>Horário Fim</label>
-                            <TimePicker value={endTime} onChange={setEndTime} />
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
+                    <div className="col-md-4 mb-4">
                         <div className="form-group">
                             <label>Dia da Semana </label>
                             <DayOfWeekSelect

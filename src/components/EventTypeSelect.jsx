@@ -15,13 +15,13 @@ export default function EventTypeSelect({ value, defaultValue, onChange }) {
     return (
         <Select
             data-testid="eventTypeSelect"
-            aria-label="Selecione o Tipo de Evento"
+            aria-label="Tipo de Evento"
             defaultValue={defaultValue}
             value={value}
             onChange={onChange}
             isClearable={true}
             options={eventTypeList}
-            placeholder={"Selecione o tipo de evento"}
+            placeholder={"Tipo de evento"}
             getOptionLabel={(option) => option.name}
             getOptionValue={(option) => option}
         />
