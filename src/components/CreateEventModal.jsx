@@ -49,6 +49,12 @@ export default function CreateEventModal({
                         <DatePicker value={date} onChange={setDate} />
                     </Col>
                 </Form.Row>
+                <div className="text-center pb-2 pt-2">
+                    Selecione um <b>Tipo de evento</b> e uma <b>data</b>, e em
+                    seguida clique em <b>Salvar</b>. <br />
+                    Você pode também criar eventos em dias passados caso precise
+                    registrar em atrasado.
+                </div>
             </Modal.Body>
 
             <Modal.Footer>

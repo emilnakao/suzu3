@@ -1,4 +1,4 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { HotKeys } from "react-hotkeys";
@@ -42,7 +42,7 @@ function SelfCheckInPage({
     /**
      * List of name suggestions according to what the user types.
      */
-    const personList = useAsync([
+    const [personList, loadingPersonList] = useAsync([
         personRepository.findPerson,
         debouncedSearchTerm,
     ]);
@@ -190,12 +190,27 @@ function SelfCheckInPage({
                                     </div>
                                 )}
 
+                            {/* Carregando lista de pessoas */}
+                            {loadingPersonList && (
+                                <div>
+                                    <div className="text-center v-100">
+                                        <FontAwesomeIcon
+                                            icon={faSpinner}
+                                            spin
+                                        />{" "}
+                                        Carregando...
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Lista de opções de nomes */}
-                            {personList &&
+                            {!loadingPersonList &&
+                                personList &&
                                 personList.map(function (person, index) {
                                     if (person) {
                                         return (
                                             <SelfCheckInLine
+                                                key={index}
                                                 person={person}
                                                 isFocused={index === focusIndex}
                                                 presenceList={presenceList}
