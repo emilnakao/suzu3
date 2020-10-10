@@ -178,7 +178,7 @@ describe("PresenceRepository", () => {
                 startTime: past1minute,
                 endTime: past3hours,
             })
-        ).rejects.toMatch("Período de busca inválido.");
+        ).rejects.toMatch("Intervalo de horário inválido.");
     });
 
     it("Blocks open interval for date", async () => {
