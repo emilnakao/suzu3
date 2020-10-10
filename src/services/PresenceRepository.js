@@ -67,8 +67,8 @@ export default class PresenceRepository {
         };
 
         // day of week optional filter
-        if (dayOfWeek) {
-            selectorObject.dayOfWeek = { $eq: `${dayOfWeek}` };
+        if (dayOfWeek && dayOfWeek.value) {
+            selectorObject.dayOfWeek = { $eq: `${dayOfWeek.value}` };
         }
 
         return this.db.find({

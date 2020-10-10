@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 function PresenceListWidget({ presenceList = [] }) {
     const kumiteLabel = "PRATICANTE";
@@ -123,6 +124,14 @@ function PresenceListWidget({ presenceList = [] }) {
                                         />
                                         {presence.person &&
                                             presence.person.name}
+
+                                        <br />
+                                        <small>
+                                            Registrado{" "}
+                                            {moment(
+                                                presence.registrationDateTime
+                                            ).fromNow()}
+                                        </small>
                                     </td>
                                 </tr>
                             );

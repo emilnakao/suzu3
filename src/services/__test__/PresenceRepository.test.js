@@ -215,7 +215,7 @@ describe("PresenceRepository", () => {
         let resultSunday = await repository.findPresencesByInterval({
             startDate: "2020-09-29",
             endDate: "2020-10-30",
-            dayOfWeek: 1, //Sun
+            dayOfWeek: {value: "1"}, //Sun
         });
 
         expect(resultSunday.docs.length).toEqual(0);
@@ -223,7 +223,7 @@ describe("PresenceRepository", () => {
         let resultThursday = await repository.findPresencesByInterval({
             startDate: "2020-09-29",
             endDate: "2020-10-30",
-            dayOfWeek: 5, //Thu
+            dayOfWeek: {value: "5"}, //Thu
         });
 
         expect(resultThursday.docs.length).toEqual(1);
