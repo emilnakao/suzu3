@@ -1,22 +1,78 @@
-import React from "react";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from "react";
 import FileUpload from "../components/FileUpload";
 import { csvImporter } from "../services/ApplicationContext";
+import NotificationService from "../services/NotificationService";
 
 /**
  *
  * @param {*} props
  */
 function AdminPage() {
+    const [loading, setLoading] = useState(false);
+
     const loadPersonCSV = (filePath) => {
-        csvImporter.importPerson(filePath);
+        setLoading(true);
+        csvImporter
+            .importPerson(filePath)
+            .then(() => {
+                NotificationService.success(
+                    "Sucesso",
+                    "Importação de pessoas concluída com sucesso."
+                );
+            })
+            .catch((error) => {
+                NotificationService.error(
+                    "Erro",
+                    `Não foi possível importar a planilha de pessoas. ${error}`
+                );
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const loadEventTypeCSV = (filePath) => {
-        csvImporter.importEventType(filePath);
+        setLoading(true);
+        csvImporter
+            .importEventType(filePath)
+            .then(() => {
+                NotificationService.success(
+                    "Sucesso",
+                    "Importação de tipos de evento concluída com sucesso."
+                );
+            })
+            .catch((error) => {
+                NotificationService.error(
+                    "Erro",
+                    `Não foi possível importar a planilha de tipos de evento. ${error}`
+                );
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     const loadHanCSV = (filePath) => {
-        csvImporter.importHan(filePath);
+        setLoading(true);
+        csvImporter
+            .importHan(filePath)
+            .then(() => {
+                NotificationService.success(
+                    "Sucesso",
+                    "Importação de hans concluída com sucesso."
+                );
+            })
+            .catch((error) => {
+                NotificationService.error(
+                    "Erro",
+                    `Não foi possível importar a planilha de hans. ${error}`
+                );
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     };
 
     return (
@@ -52,7 +108,8 @@ function AdminPage() {
                             </tr>
                         </tbody>
                     </table>
-                    <FileUpload onFileUpload={loadPersonCSV} />
+                    {!loading && <FileUpload onFileUpload={loadPersonCSV} />}
+                    {loading && <FontAwesomeIcon icon={faSpinner} spin />}
                 </section>
                 <hr />
                 {/* *********************************************************** */}
@@ -79,7 +136,8 @@ function AdminPage() {
                             </tr>
                         </tbody>
                     </table>
-                    <FileUpload onFileUpload={loadEventTypeCSV} />
+                    {!loading && <FileUpload onFileUpload={loadEventTypeCSV} />}
+                    {loading && <FontAwesomeIcon icon={faSpinner} spin />}
                 </section>
                 <hr />
                 {/* *********************************************************** */}
@@ -109,7 +167,8 @@ function AdminPage() {
                             </tr>
                         </tbody>
                     </table>
-                    <FileUpload onFileUpload={loadHanCSV} />
+                    {!loading && <FileUpload onFileUpload={loadHanCSV} />}
+                    {loading && <FontAwesomeIcon icon={faSpinner} spin />}
                 </section>
             </div>
         </div>

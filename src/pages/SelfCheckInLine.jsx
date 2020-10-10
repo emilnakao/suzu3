@@ -47,6 +47,7 @@ function SelfCheckInLine({
 
     return (
         <div
+            key={person.name}
             className={
                 "suzu-checkin-row rounded " + (isFocused ? "highlight" : "")
             }

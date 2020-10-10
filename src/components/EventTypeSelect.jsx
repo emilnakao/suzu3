@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { eventTypeRepository } from "../services/ApplicationContext";
+import NotificationService from "../services/NotificationService";
 
 export default function EventTypeSelect({ value, defaultValue, onChange }) {
     const [eventTypeList, setEventTypeList] = useState([]);
 
     useEffect(() => {
-        eventTypeRepository.findAll().then((result) => {
-            setEventTypeList(result.docs);
-            console.log("loaded:" + result.docs);
-        });
+        eventTypeRepository
+            .findAll()
+            .then((result) => {
+                setEventTypeList(result.docs);
+            })
+            .catch((error) => {
+                NotificationService.error(
+                    "Erro",
+                    `Erro ao carregar tipos de evento. ${error}`
+                );
+            });
     }, []);
 
     return (

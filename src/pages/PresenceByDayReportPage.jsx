@@ -87,7 +87,7 @@ function PresenceByDayReportPage() {
 
                 <div className="form-row">
                     <div className="col-md-6 mb-3">
-                        <label for={"startDatePicker"}>
+                        <label htmlFor={"startDatePicker"}>
                             <b>Período de Busca</b>
                         </label>
                         <br />
@@ -153,7 +153,7 @@ function PresenceByDayReportPage() {
                     <tbody>
                         {items.map(function (counts, idx) {
                             return (
-                                <tr>
+                                <tr key={idx}>
                                     <td className="ml-3">{idx + 1}</td>
                                     <td>{counts.day}</td>
                                     <td>{counts.kumite || 0}</td>
