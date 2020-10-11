@@ -1,5 +1,4 @@
 import {
-    faAlignCenter,
     faEdit,
     faSave,
     faSpinner,
@@ -318,7 +317,9 @@ function PersonPage() {
                                                                 >
                                                                     <FontAwesomeIcon
                                                                         icon={
-                                                                            faSave
+                                                                            loading
+                                                                                ? faSpinner
+                                                                                : faSave
                                                                         }
                                                                     />
                                                                 </button>
