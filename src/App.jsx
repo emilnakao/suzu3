@@ -88,9 +88,9 @@ function App() {
             <div className={"w-100 vh-100 d-flex flex-column"}>
                 <nav className="navbar navbar-expand-md navbar-dark bg-dark">
                     {/*Logo*/}
-                    <a className="navbar-brand" href="/">
+                    <div className="navbar-brand">
                         <b>SUZU</b>3
-                    </a>
+                    </div>
                     <button
                         className="navbar-toggler"
                         type="button"
