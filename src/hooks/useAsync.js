@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import NotificationService from "../services/NotificationService";
 
 /**
  * Custom hook to fetch data from a given url.
@@ -9,6 +10,7 @@ import { useState, useEffect } from "react";
  */
 export const useAsync = ([asyncFunction, args]) => {
     const [value, setValue] = useState(undefined);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         async function fetchData(){
@@ -18,12 +20,18 @@ export const useAsync = ([asyncFunction, args]) => {
                 return;
             }
 
-            const response = await asyncFunction(args);
-            setValue(response["docs"]);
+            setLoading(true);
+            asyncFunction(args).then((response) => {
+                setValue(response["docs"]);
+            }).catch((error) => {
+                NotificationService.error('Erro na busca', error);
+            }).finally(() => {
+                setLoading(false);
+            });
         }
 
         fetchData();
     }, [asyncFunction, args]);
 
-    return value;
+    return [value, loading];
 };

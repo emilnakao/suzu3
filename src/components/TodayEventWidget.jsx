@@ -5,7 +5,7 @@ import EventFormatter from "../utils/EventFormatter";
 
 export default function TodayEventWidget({ currentEvent, setCurrentEvent }) {
     const [currentEventName, setCurrentEventName] = useState(
-        "Evento não selecionado"
+        currentEvent ? currentEvent.eventType.name : "Evento não selecionado"
     );
 
     const [currentEventDate, setCurrentEventDate] = useState(

@@ -26,14 +26,19 @@ export default function FileUpload({ onFileUpload }) {
 
     return (
         <React.Fragment>
-            <div {...getRootProps({ className: "dropzone" })}>
+            <div
+                style={{ border: "dashed 2px darkgray", textAlign: "center" }}
+                {...getRootProps({ className: "dropzone" })}
+            >
                 <input {...getInputProps()} />
                 <p>Clique aqui ou arraste arquivos para cá</p>
             </div>
-            <aside>
-                <h4>Arquivos Selecionados</h4>
-                <ul>{files}</ul>
-            </aside>
+            {acceptedFiles && acceptedFiles.length > 0 && (
+                <aside>
+                    <h4>Arquivos Selecionados</h4>
+                    <ul>{files}</ul>
+                </aside>
+            )}
         </React.Fragment>
     );
 }

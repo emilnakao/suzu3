@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import "react-day-picker/lib/style.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { eventRepository } from "../services/ApplicationContext";
 import DatePicker from "./DatePicker";
 import EventTypeSelect from "./EventTypeSelect";
@@ -28,14 +28,21 @@ export default function SelectEventModal({
      */
     const [eventList, setEventList] = useState([]);
 
+    const [loading, setLoading] = useState(false);
+
+    const [pristine, setPristine] = useState(true);
+
     const handleChangeEventType = (selectedOption) => {
         setEventType(selectedOption);
         console.log(`Option selected:`, selectedOption);
     };
 
     const handleSearch = async () => {
+        setLoading(true);
+        setPristine(false);
         let eventTypeId = eventType ? eventType.id : undefined;
         let events = await eventRepository.findEvents(date, eventTypeId);
+        setLoading(false);
         setEventList(events.docs);
     };
 
@@ -68,39 +75,63 @@ export default function SelectEventModal({
                     </div>
                 </div>
             </Modal.Body>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <td>Evento</td>
-                        <td>Data</td>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {eventList.map(function (event, idx) {
-                        return (
-                            <tr>
-                                <td>{event.eventType.name}</td>
-                                <td>{event.date}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-outline-secondary btn-sm"
-                                        onClick={() => {
-                                            handleSelectEvent(event);
-                                        }}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faCheck}
-                                            className="text-info"
-                                        />{" "}
-                                        Selecionar
-                                    </button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+            {loading && (
+                <div className="text-center pb-2">
+                    <FontAwesomeIcon icon={faSpinner} spin /> Carregando...
+                </div>
+            )}
+            {!loading && pristine && (
+                <div className="text-center pb-2">
+                    Clique em <b>Buscar</b> para selecionar um evento que já foi
+                    criado.
+                    <p>
+                        Você pode buscar apenas pela data, apenas pelo tipo, ou
+                        por ambos.
+                    </p>
+                </div>
+            )}
+            {!loading &&
+                !pristine &&
+                (!eventList || eventList.length === 0) && (
+                    <div className="text-center pb-2">
+                        Não foram encontrados resultados.
+                    </div>
+                )}
+            {!loading && eventList && eventList.length > 0 && (
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>Evento</td>
+                            <td>Data</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {eventList.map(function (event, idx) {
+                            return (
+                                <tr key={idx}>
+                                    <td>{event.eventType.name}</td>
+                                    <td>{event.date}</td>
+                                    <td>
+                                        <button
+                                            className="btn btn-outline-secondary btn-sm"
+                                            onClick={() => {
+                                                handleSelectEvent(event);
+                                            }}
+                                        >
+                                            <FontAwesomeIcon
+                                                icon={faCheck}
+                                                className="text-info"
+                                            />{" "}
+                                            Selecionar
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            )}
 
             <Modal.Footer>
                 <button

@@ -5,6 +5,10 @@ import { getPersonCssClassFromPresence } from "../utils/CssClassProvider";
 import useSortableData from "../hooks/useSortableData";
 import { presenceRepository } from "../services/ApplicationContext";
 import DatePicker from "../components/DatePicker";
+import TimeSelect from "../components/TimeSelect";
+import DayOfWeekSelect from "../components/DayOfWeekSelect";
+import NotificationService from "../services/NotificationService";
+import { logError } from "../utils/Logger";
 
 /**
  *
@@ -15,6 +19,12 @@ function PresenceByPersonReportPage() {
 
     const [endDate, setEndDate] = useState(new Date());
 
+    const [startTime, setStartTime] = useState(undefined);
+
+    const [endTime, setEndTime] = useState(undefined);
+
+    const [dayOfWeek, setDayOfWeek] = useState(undefined);
+
     const [presenceList, setPresenceList] = useState([]);
 
     const { items, requestSort } = useSortableData(presenceList);
@@ -24,6 +34,9 @@ function PresenceByPersonReportPage() {
             .findPresencesByInterval({
                 startDate: startDate,
                 endDate: endDate,
+                startTime: startTime ? startTime.value : undefined,
+                endTime: endTime ? endTime.value : undefined,
+                dayOfWeek: dayOfWeek,
             })
             .then((response) => {
                 let groupedResponse = response.docs || [];
@@ -57,6 +70,10 @@ function PresenceByPersonReportPage() {
                 });
 
                 setPresenceList(groupedResponse);
+            })
+            .catch((reason) => {
+                logError("PresenceByPersonReport", reason);
+                NotificationService.error("Erro", reason);
             });
     };
 
@@ -64,21 +81,52 @@ function PresenceByPersonReportPage() {
         <div role="main" className="w-100 vh-100 jumbotron">
             <div className="col-md-12">
                 <h1>Presenças por Pessoa</h1>
-                <div className="row">
-                    <div className="col">
-                        <DatePicker value={startDate} onChange={setStartDate} />
+                <div className="form-row">
+                    <div className="col-md-6 mb-3">
+                        <label htmlFor={"startDatePicker"}>
+                            <b>Período de Busca</b>
+                        </label>
+                        <br />
+                        <DatePicker
+                            id={"startDatePicker"}
+                            value={startDate}
+                            onChange={setStartDate}
+                        />
                         &nbsp; a &nbsp;
                         <DatePicker value={endDate} onChange={setEndDate} />
-                        <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={handleSearch}
-                            disabled={!startDate && !endDate}
-                        >
-                            Buscar
-                        </button>
                     </div>
                 </div>
+                <div className="form-row">
+                    <div className="col-md-5 mb-3 ">
+                        <label>Horário de Entrada (Opcional)</label>
+                        <br />
+                        <div className="d-inline-flex">
+                            <TimeSelect
+                                value={startTime}
+                                onChange={setStartTime}
+                            />
+                            &nbsp; a &nbsp;
+                            <TimeSelect value={endTime} onChange={setEndTime} />
+                        </div>
+                    </div>
+                    <div className="col-md-4 mb-4">
+                        <div className="form-group">
+                            <label>Dia da Semana </label>
+                            <DayOfWeekSelect
+                                value={dayOfWeek}
+                                onChange={setDayOfWeek}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSearch}
+                    disabled={!startDate && !endDate}
+                >
+                    Buscar
+                </button>
                 <hr />
                 <table className="table table-striped table-hover table-sm ">
                     <thead>

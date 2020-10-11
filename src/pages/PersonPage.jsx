@@ -1,6 +1,8 @@
 import {
+    faAlignCenter,
     faEdit,
     faSave,
+    faSpinner,
     faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,7 +52,7 @@ function PersonPage() {
     /**
      * List of name suggestions according to what the user types.
      */
-    const personList = useAsync([
+    const [personList, loadingPersonList] = useAsync([
         personRepository.findPerson,
         debouncedSearchTerm,
     ]);
@@ -90,208 +92,246 @@ function PersonPage() {
                             </button>
                         </div>
 
-                        {/*  TODO: show loading properly */}
-                        {loading && <span className="loading" />}
-
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <td>Nome</td>
-                                    <td>Kumite?</td>
-                                    <td>Mahikari-tai?</td>
-                                    <td>Han</td>
-                                    <td>Última Atualização</td>
-                                    <td></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {/* Lista de opções de nomes */}
-                                {personList &&
-                                    personList.map(function (person, index) {
-                                        if (person && !(index === editIndex)) {
-                                            return (
-                                                <tr>
-                                                    <td>{person.name}</td>
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-control"
-                                                            checked={
-                                                                !person.isMiKumite
-                                                            }
-                                                            disabled={true}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-control"
-                                                            checked={
-                                                                person.isMtai
-                                                            }
-                                                            disabled={true}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        {person.han
-                                                            ? person.han.name
-                                                            : "Não Definido"}
-                                                    </td>
-                                                    <td>
-                                                        {`${moment(
-                                                            person.updateDateTime
-                                                        ).format(
-                                                            "DD/MM/YYYY HH:mm:ss"
-                                                        )}`}
-                                                    </td>
-                                                    <td>
-                                                        <button
-                                                            type="button"
-                                                            className="btn btn-sm btn-secondary"
-                                                            onClick={() => {
-                                                                setEditIndex(
-                                                                    index
-                                                                );
-                                                                setEditName(
-                                                                    person.name
-                                                                );
-                                                                setEditIsMtai(
-                                                                    person.isMtai
-                                                                );
-                                                                setEditIsMiKumite(
-                                                                    person.isMiKumite
-                                                                );
-                                                            }}
-                                                        >
-                                                            <FontAwesomeIcon
-                                                                icon={faEdit}
-                                                            />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        } else if (index === editIndex) {
-                                            return (
-                                                <tr>
-                                                    <td>
-                                                        <input
-                                                            type="text"
-                                                            className="form-control form-control-sm"
-                                                            value={editName}
-                                                            onChange={(
-                                                                event
-                                                            ) => {
-                                                                person.name =
-                                                                    event.target.value;
-                                                                setEditName(
-                                                                    person.name
-                                                                );
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-control"
-                                                            checked={
-                                                                !editIsMiKumite
-                                                            }
-                                                            onChange={() => {
-                                                                person.isMiKumite = !person.isMiKumite;
-                                                                setEditIsMiKumite(
-                                                                    person.isMiKumite
-                                                                );
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-control"
-                                                            checked={editIsMtai}
-                                                            onChange={() => {
-                                                                person.isMtai = !person.isMtai;
-                                                                setEditIsMtai(
-                                                                    person.isMtai
-                                                                );
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td>
-                                                        <Select
-                                                            defaultValue={
-                                                                person.han
-                                                            }
-                                                            onChange={(
-                                                                newValue
-                                                            ) => {
-                                                                person.han = newValue;
-                                                            }}
-                                                            options={hanList}
-                                                            placeholder={"Han"}
-                                                            isClearable={true}
-                                                            isOptionSelected={
-                                                                false
-                                                            }
-                                                            getOptionLabel={(
-                                                                option
-                                                            ) => option.name}
-                                                        />{" "}
-                                                    </td>
-                                                    <td>
-                                                        {`${person.updateDateTime}`}
-                                                    </td>
-                                                    <td>
-                                                        <button
-                                                            type="button"
-                                                            className="form-control btn btn-sm btn-primary"
-                                                            onClick={() => {
-                                                                setLoading(
-                                                                    true
-                                                                );
-
-                                                                person.name = editName;
-                                                                person.isMiKumite = editIsMiKumite;
-                                                                person.isMtai = editIsMtai;
-
-                                                                personRepository
-                                                                    .update(
-                                                                        person
-                                                                    )
-                                                                    .finally(
-                                                                        () => {
-                                                                            setLoading(
-                                                                                false
-                                                                            );
-                                                                            setEditIndex(
-                                                                                undefined
-                                                                            );
-                                                                            setEditName(
-                                                                                undefined
-                                                                            );
-                                                                            setEditIsMiKumite(
-                                                                                undefined
-                                                                            );
-                                                                            setEditIsMtai(
-                                                                                undefined
-                                                                            );
+                        {loadingPersonList && (
+                            <div className="text-center vh-100">
+                                <FontAwesomeIcon icon={faSpinner} spin />{" "}
+                                Carregando...
+                            </div>
+                        )}
+                        {!loadingPersonList &&
+                            personList &&
+                            personList.length > 0 && (
+                                <table className="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <td>Nome</td>
+                                            <td>Kumite?</td>
+                                            <td>Mahikari-tai?</td>
+                                            <td>Han</td>
+                                            <td>Última Atualização</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* Lista de opções de nomes */}
+                                        {personList &&
+                                            personList.map(function (
+                                                person,
+                                                index
+                                            ) {
+                                                if (
+                                                    person &&
+                                                    !(index === editIndex)
+                                                ) {
+                                                    return (
+                                                        <tr>
+                                                            <td>
+                                                                {person.name}
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-control"
+                                                                    checked={
+                                                                        !person.isMiKumite
+                                                                    }
+                                                                    disabled={
+                                                                        true
+                                                                    }
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-control"
+                                                                    checked={
+                                                                        person.isMtai
+                                                                    }
+                                                                    disabled={
+                                                                        true
+                                                                    }
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                {person.han
+                                                                    ? person.han
+                                                                          .name
+                                                                    : "Não Definido"}
+                                                            </td>
+                                                            <td>
+                                                                {`${moment(
+                                                                    person.updateDateTime
+                                                                ).format(
+                                                                    "DD/MM/YYYY HH:mm:ss"
+                                                                )}`}
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    type="button"
+                                                                    className="btn btn-sm btn-secondary"
+                                                                    onClick={() => {
+                                                                        setEditIndex(
+                                                                            index
+                                                                        );
+                                                                        setEditName(
+                                                                            person.name
+                                                                        );
+                                                                        setEditIsMtai(
+                                                                            person.isMtai
+                                                                        );
+                                                                        setEditIsMiKumite(
+                                                                            person.isMiKumite
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <FontAwesomeIcon
+                                                                        icon={
+                                                                            faEdit
                                                                         }
-                                                                    );
-                                                            }}
-                                                        >
-                                                            <FontAwesomeIcon
-                                                                icon={faSave}
-                                                            />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        } else {
-                                            return undefined;
-                                        }
-                                    })}
-                            </tbody>
-                        </table>
+                                                                    />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                } else if (
+                                                    index === editIndex
+                                                ) {
+                                                    return (
+                                                        <tr>
+                                                            <td>
+                                                                <input
+                                                                    type="text"
+                                                                    className="form-control form-control-sm"
+                                                                    value={
+                                                                        editName
+                                                                    }
+                                                                    onChange={(
+                                                                        event
+                                                                    ) => {
+                                                                        person.name =
+                                                                            event.target.value;
+                                                                        setEditName(
+                                                                            person.name
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-control"
+                                                                    checked={
+                                                                        !editIsMiKumite
+                                                                    }
+                                                                    onChange={() => {
+                                                                        person.isMiKumite = !person.isMiKumite;
+                                                                        setEditIsMiKumite(
+                                                                            person.isMiKumite
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-control"
+                                                                    checked={
+                                                                        editIsMtai
+                                                                    }
+                                                                    onChange={() => {
+                                                                        person.isMtai = !person.isMtai;
+                                                                        setEditIsMtai(
+                                                                            person.isMtai
+                                                                        );
+                                                                    }}
+                                                                />
+                                                            </td>
+                                                            <td>
+                                                                <Select
+                                                                    defaultValue={
+                                                                        person.han
+                                                                    }
+                                                                    onChange={(
+                                                                        newValue
+                                                                    ) => {
+                                                                        person.han = newValue;
+                                                                    }}
+                                                                    options={
+                                                                        hanList
+                                                                    }
+                                                                    placeholder={
+                                                                        "Han"
+                                                                    }
+                                                                    isClearable={
+                                                                        true
+                                                                    }
+                                                                    isOptionSelected={
+                                                                        false
+                                                                    }
+                                                                    getOptionLabel={(
+                                                                        option
+                                                                    ) =>
+                                                                        option.name
+                                                                    }
+                                                                />{" "}
+                                                            </td>
+                                                            <td>
+                                                                {`${person.updateDateTime}`}
+                                                            </td>
+                                                            <td>
+                                                                <button
+                                                                    type="button"
+                                                                    className="form-control btn btn-sm btn-primary"
+                                                                    onClick={() => {
+                                                                        setLoading(
+                                                                            true
+                                                                        );
+
+                                                                        person.name = editName;
+                                                                        person.isMiKumite = editIsMiKumite;
+                                                                        person.isMtai = editIsMtai;
+
+                                                                        personRepository
+                                                                            .update(
+                                                                                person
+                                                                            )
+                                                                            .finally(
+                                                                                () => {
+                                                                                    setLoading(
+                                                                                        false
+                                                                                    );
+                                                                                    setEditIndex(
+                                                                                        undefined
+                                                                                    );
+                                                                                    setEditName(
+                                                                                        undefined
+                                                                                    );
+                                                                                    setEditIsMiKumite(
+                                                                                        undefined
+                                                                                    );
+                                                                                    setEditIsMtai(
+                                                                                        undefined
+                                                                                    );
+                                                                                }
+                                                                            );
+                                                                    }}
+                                                                >
+                                                                    <FontAwesomeIcon
+                                                                        icon={
+                                                                            faSave
+                                                                        }
+                                                                    />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    );
+                                                } else {
+                                                    return undefined;
+                                                }
+                                            })}
+                                    </tbody>
+                                </table>
+                            )}
                     </div>
                 </div>
             </div>

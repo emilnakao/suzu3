@@ -1,126 +1,125 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
 
-  to {
-    transform: rotate(360deg);
-  }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* CheckIn Page Styles */
 
 div.suzu-checkin-row {
-  border-color: #152820;
-  margin: 0;
-  padding: 10px;
+    border-color: #152820;
+    margin: 0;
+    padding: 10px;
 }
 
 div.suzu-checkin-row:nth-child(even) {
-  background-color: #CAE3D9;
+    background-color: #cae3d9;
 }
 
 div.suzu-checkin-row:nth-child(odd) {
-  background-color: #F2F8F5;
+    background-color: #f2f8f5;
 }
 
 div.suzu-checkin-row.highlight {
-  background-color: #ffffff;
-  border: 2px dashed #5DA30C;
+    background-color: #ffffff;
+    border: 2px dashed #5da30c;
 }
 
 div.suzu-checkin-row.highlight .btn-success:after,
 div.suzu-checkin-row.highlight .btn-danger:after {
-  content: " \23CE"
-
+    content: " \23CE";
 }
 
 .suzu-checkin-row h4 {
-  color: #34789a;
+    color: #34789a;
 }
 
 /* Presence count widget styles */
 
 .presence-counter-box {
-  height: 80px;
-  flex-basis: 100%;
+    height: 80px;
+    flex-basis: 100%;
 }
 
 .presence-counter {
-  font-size: 2em;
-  text-align: center;
-  color: white;
-  padding: 2px;
-  font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+    color: white;
+    padding: 2px;
+    font-weight: bold;
 }
 
 .presence-label {
-  color: white;
-  text-align: center;
-  padding: 1px;
-  font-size: smaller;
+    color: white;
+    text-align: center;
+    padding: 1px;
+    font-size: smaller;
 }
 
 /* Person classification colors */
 
 .kumite-background-color {
-  background-color: #428bca;
+    background-color: #428bca;
 }
 
 .kumite-color {
-  color: #428bca;
+    color: #428bca;
 }
 
 .mikumite-background-color {
-  background-color: #5cb85c;
+    background-color: #5cb85c;
 }
 
 .mikumite-color {
-  color: #5cb85c;
+    color: #5cb85c;
 }
 
 .mtai-background-color {
-  background-color: #2b542c;
+    background-color: #2b542c;
 }
 
 .mtai-color {
-  color: #2b542c;
+    color: #2b542c;
 }
 
 .first-time-background-color {
-  background-color: #d9534f;
+    background-color: #d9534f;
 }
 
 .first-time-color {
-  color: #d9534f;
+    color: #d9534f;
 }
