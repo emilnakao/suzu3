@@ -54,10 +54,11 @@ export default class PresenceRepository {
         };
 
         if (startTime || endTime) {
+            
             let startMinutesFromMidnight = getMinutesFromMidnightFromString(startTime);
             let endMinutesFromMidnight = getMinutesFromMidnightFromString(endTime);
 
-            if(startMinutesFromMidnight >= endMinutesFromMidnight){
+            if((startMinutesFromMidnight >= endMinutesFromMidnight) || !(startTime && endTime)){
                 return Promise.reject("Intervalo de horário inválido.");
             }
 
