@@ -158,13 +158,12 @@ describe("PresenceRepository", () => {
 
         let past3hours = moment().subtract(3, "hours").format("HH:mm");
 
-        let result = await repository.findPresencesByInterval({
+        expect(repository.findPresencesByInterval({
             startDate: "2020-10-01",
             endDate: "2020-10-01",
             startTime: past3hours,
-        });
+        })).rejects.toMatch("Intervalo de horário inválido.");
 
-        expect(result.docs.length).toEqual(1);
     });
 
     it("Invalid time interval", async () => {
