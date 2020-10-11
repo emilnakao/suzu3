@@ -124,16 +124,15 @@ describe("PresenceRepository", () => {
             isFirstTime: false,
         });
 
-        let past3hours = moment().subtract(3, "hours").format("HH:mm");
-        let past1minute = moment().subtract(1, "minutes").format("HH:mm");
-        let next3minutes = moment().add(3, "minutes").format("HH:mm");
+        let pastMinute = moment().subtract(1, "minutes").format("HH:mm");
+        let nextMinute = moment().add(1, "minutes").format("HH:mm");
 
         // search between 29/09 and 30/09:
         let resultOnlyPast = await repository.findPresencesByInterval({
             startDate: "2020-10-01",
             endDate: "2020-10-01",
-            startTime: past3hours,
-            endTime: past1minute,
+            startTime: "07:00",
+            endTime: "07:01",
         });
 
         expect(resultOnlyPast.docs.length).toEqual(0);
@@ -142,8 +141,8 @@ describe("PresenceRepository", () => {
         let resultUntilFuture = await repository.findPresencesByInterval({
             startDate: "2020-10-01",
             endDate: "2020-10-01",
-            startTime: past3hours,
-            endTime: next3minutes,
+            startTime: pastMinute,
+            endTime: nextMinute,
         });
 
         expect(resultUntilFuture.docs.length).toEqual(1);
