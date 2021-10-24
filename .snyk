@@ -1,0 +1,48 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.22.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils > debug:
+        patched: '2021-10-24T01:00:12.987Z'
+  SNYK-JS-LODASH-567746:
+    - '@testing-library/jest-dom > lodash':
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-bootstrap > @restart/hooks > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > @babel/core > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > eslint > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > eslint-plugin-flowtype > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > html-webpack-plugin > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > webpack-manifest-plugin > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > @babel/core > @babel/traverse > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > eslint > inquirer > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > eslint > table > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > optimize-css-assets-webpack-plugin > last-call-webpack-plugin > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > react-dev-utils > inquirer > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > webpack-dev-server > http-proxy-middleware > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > @svgr/webpack > @babel/preset-env > @babel/plugin-transform-block-scoping > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > webpack-dev-server > portfinder > async > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-select > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > @svgr/webpack > @babel/preset-env > @babel/plugin-transform-modules-amd > @babel/helper-module-transforms > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+    - react-scripts > jest-environment-jsdom-fourteen > jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2021-10-24T01:00:12.987Z'
+  'npm:ms:20170412':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils > debug > ms:
+        patched: '2021-10-24T01:00:12.987Z'
