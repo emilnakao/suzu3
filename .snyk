@@ -1,0 +1,18 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-md5 > pouchdb-utils > debug:
+        patched: '2023-06-03T14:01:10.157Z'
+  SNYK-JS-LODASH-567746:
+    - react-select > @emotion/core > @emotion/css > babel-plugin-emotion > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2023-06-03T14:01:10.157Z'
+    - react-scripts > @svgr/webpack > @babel/preset-env > @babel/plugin-proposal-unicode-property-regex > @babel/helper-create-regexp-features-plugin > @babel/helper-regex > lodash:
+        patched: '2023-06-03T14:01:10.157Z'
+    - react-scripts > jest > jest-cli > @jest/core > @jest/reporters > jest-runtime > jest-config > jest-environment-jsdom > jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2023-06-03T14:01:10.157Z'
+  'npm:ms:20170412':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-md5 > pouchdb-utils > debug > ms:
+        patched: '2023-06-03T14:01:10.157Z'
