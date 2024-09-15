@@ -1,0 +1,19 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:debug:20170905':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils > debug:
+        patched: '2024-09-15T09:08:07.301Z'
+        id: 'npm:debug:20170905'
+        path: >-
+          pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils >
+          debug
+  'npm:ms:20170412':
+    - pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils > debug > ms:
+        patched: '2024-09-15T09:08:07.301Z'
+        id: 'npm:ms:20170412'
+        path: >-
+          pouchdb-quick-search > pouchdb-mapreduce-no-ddocs > pouchdb-utils >
+          debug > ms
